@@ -12,7 +12,7 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
 
-private:
-    void GameManagerCallback();
+    cocos2d::Layer* layer1;
+	cocos2d::Sprite* player;
 };
 

@@ -24,17 +24,21 @@ bool GameScene::init()
     auto wlayer = LayerColor::create(Color4B::WHITE);
     this->addChild(wlayer);
 
-   
+    auto background1 = Sprite::create("mission1background.png");
+    background1->setAnchorPoint(Vec2(0, 0));
+    background1->setPosition(Vec2(0, 0));
+	background1->setZOrder(0);
+    this->addChild(background1);
+
+	player = Sprite::create("Fio.png");
+	player->setScale(3);
+	player->setAnchorPoint(Vec2(0, 0));
+	player->setPosition(Vec2(100, 100));
+	player->setZOrder(5);
+	this->addChild(player);
+
+
+
     return true;
 }
 
-void GameScene::GameManagerCallback()
-{
-    // 종료 루틴을 넣어준다.
-    _director->getTextureCache()->removeUnusedTextures();
-
-    auto pScene = StartScene::createScene();
-    Director::getInstance()->replaceScene(pScene);
-
- 
-}
