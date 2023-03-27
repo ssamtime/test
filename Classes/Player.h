@@ -31,9 +31,12 @@ private:
     bool _up;
     bool _down;
 
+    bool isLeftPressed;
+    bool isRightPressed;
+
     void update(float f)override;
     
-    
+    void jump();
     
 
  

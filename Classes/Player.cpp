@@ -57,12 +57,18 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = true;
+		isLeftPressed = true;
+		if(isRightPressed)
+			player->setFlippedX(true);
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = true;
+		isRightPressed = true;
+		if (isLeftPressed)
+			player->setFlippedX(false);
 		break;
-	case EventKeyboard::KeyCode::KEY_UP_ARROW:
-		_up = true;
+	case EventKeyboard::KeyCode::KEY_S:
+		jump();
 		break;
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 		_down = true;
@@ -76,6 +82,7 @@ void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = false;
+		
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = false;
@@ -107,6 +114,15 @@ void Player::update(float f)
 	{
 		player->setPositionY(player->getPositionY() - 10);
 	}
+}
+
+void Player::jump()
+{
+	auto jump = MoveBy::create(0.3, Vec2(0, 100));
+	auto reversejump = jump->reverse();
+	auto sequence = Sequence::create(jump, reversejump, nullptr);
+	
+	player->runAction(sequence);
 }
 
 
