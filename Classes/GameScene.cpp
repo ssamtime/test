@@ -1,6 +1,7 @@
 #include "GameScene.h"
 #include "GameManager.h"
 #include "StartScene.h"
+#include "Player.h"
 
 USING_NS_CC;
 using namespace std;
@@ -30,13 +31,8 @@ bool GameScene::init()
 	background1->setZOrder(0);
     this->addChild(background1);
 
-	player = Sprite::create("Fio.png");
-	player->setScale(3);
-	player->setAnchorPoint(Vec2(0, 0));
-	player->setPosition(Vec2(100, 100));
-	player->setZOrder(5);
-	this->addChild(player);
-
+    Player* player = Player::create();
+    addChild(player);
 
 
     return true;

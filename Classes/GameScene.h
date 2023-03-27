@@ -13,6 +13,6 @@ public:
     CREATE_FUNC(GameScene);
 
     cocos2d::Layer* layer1;
-	cocos2d::Sprite* player;
+
 };
 

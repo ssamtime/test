@@ -3,47 +3,38 @@
 #include "cocos2d.h"
 
 enum PlayerDirection {RIGHT = 0, LEFT, UP, DOWN, LENGTH};
+
 class Player : public cocos2d::Layer
 {
 public:
     Player();
     ~Player();
 
-    static Player* create(cocos2d::Node* _listener, cocos2d::SEL_CallFunc _selector);
-    virtual bool init(cocos2d::Node* _listener, cocos2d::SEL_CallFunc _selector);
+    virtual bool init();
 
-    void onExit();
+    CREATE_FUNC(Player);
+
+
     void onEnter();
+    void onExit();
 
-    // 키보드 콜백함수
-    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode,
-        cocos2d::Event* event);
-    void onKeyRelease(cocos2d::EventKeyboard::KeyCode keycode,
-        cocos2d::Event* event);
-
-    void SetMoveEventData();
-    void update(float f);
-
-    cocos2d::Node* _listener;
-    cocos2d::SEL_CallFunc _selector;
-
-    // 플레이어 이미지
-    cocos2d::Sprite* _player;
-
-    // 플레이어의 스피드
-    float _speed = 100;
+    //키보드 콜백함수
+    void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
+    void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 
 private:
-    cocos2d::EventListenerKeyboard* _keyboardListener;
+    cocos2d::Sprite* player;
+    cocos2d::EventListenerKeyboard* _listener;
 
-    // 방향에 따른 애니메이션 배열
-    cocos2d::Animation* _animPlayer[PlayerDirection::LENGTH];
-    cocos2d::Animate* _animate;
+    bool _left;
+    bool _right;
+    bool _up;
+    bool _down;
 
-    PlayerDirection _dirState;
-    bool _curDir[PlayerDirection::LENGTH];
+    void update(float f)override;
+    
+    
+    
 
-    bool isMoving = false;
-
-    void SetBoolDirection(PlayerDirection dir);
+ 
 };
