@@ -1,8 +1,7 @@
 #pragma once
 
 #include "cocos2d.h"
-
-enum PlayerDirection {RIGHT = 0, LEFT, UP, DOWN, LENGTH};
+#include "GameScene.h"
 
 class Player : public cocos2d::Layer
 {
@@ -14,7 +13,6 @@ public:
 
     CREATE_FUNC(Player);
 
-
     void onEnter();
     void onExit();
 
@@ -22,7 +20,6 @@ public:
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 
-private:
     cocos2d::Sprite* player;
     cocos2d::EventListenerKeyboard* _listener;
 
@@ -37,7 +34,8 @@ private:
     void update(float f)override;
     
     void jump();
-    
-
+    void moveBackground();
  
+private:
+
 };

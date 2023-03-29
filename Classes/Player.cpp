@@ -1,8 +1,6 @@
 #include "Player.h"
-#include "GameManager.h"
 
 USING_NS_CC;
-
 
 Player::Player()
 {
@@ -20,7 +18,6 @@ bool Player::init()
     player->setPosition(Vec2(100, 100));
     player->setZOrder(5);
     this->addChild(player);
-
 
 
 	_left = _right = _up = _down = false;
@@ -100,7 +97,15 @@ void Player::update(float f)
 {
 	if (_left)
 	{
-		player->setPositionX(player->getPositionX() - 10);
+		if (player->getPositionX() > 500)
+		{
+			moveBackground();
+		}
+		else
+		{
+			player->setPositionX(player->getPositionX() - 10);
+		}
+		
 	}
 	if (_right)
 	{
@@ -112,7 +117,7 @@ void Player::update(float f)
 	}
 	if (_down)
 	{
-		player->setPositionY(player->getPositionY() - 10);
+		
 	}
 }
 
@@ -123,6 +128,11 @@ void Player::jump()
 	auto sequence = Sequence::create(jump, reversejump, nullptr);
 	
 	player->runAction(sequence);
+}
+
+void Player::moveBackground()
+{
+	GameScene::background1->setPositionX(GameScene::background1->getPositionX() - 10);
 }
 
 

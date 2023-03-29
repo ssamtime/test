@@ -1,7 +1,5 @@
 #include "GameScene.h"
-#include "GameManager.h"
-#include "StartScene.h"
-#include "Player.h"
+
 
 USING_NS_CC;
 using namespace std;
@@ -25,7 +23,7 @@ bool GameScene::init()
     auto wlayer = LayerColor::create(Color4B::WHITE);
     this->addChild(wlayer);
 
-    auto background1 = Sprite::create("mission1background.png");
+    background1 = Sprite::create("mission1background.png");
     background1->setAnchorPoint(Vec2(0, 0));
     background1->setPosition(Vec2(0, 0));
 	background1->setZOrder(0);
