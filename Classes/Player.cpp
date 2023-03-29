@@ -2,6 +2,8 @@
 
 USING_NS_CC;
 
+cocos2d::Sprite* background1;
+
 Player::Player()
 {
 }
@@ -19,11 +21,9 @@ bool Player::init()
     player->setZOrder(5);
     this->addChild(player);
 
-
 	_left = _right = _up = _down = false;
 
 	this->scheduleUpdate();
-
 
 	return true;
 }
@@ -97,9 +97,9 @@ void Player::update(float f)
 {
 	if (_left)
 	{
-		if (player->getPositionX() > 500)
+		if (player->getPositionX() < 0)
 		{
-			moveBackground();
+
 		}
 		else
 		{
@@ -109,11 +109,28 @@ void Player::update(float f)
 	}
 	if (_right)
 	{
-		player->setPositionX(player->getPositionX() + 10);
+		float bgwidth = background1->getContentSize().width;
+		float playerpositionx = background1->getPositionX();
+		
+		if (player->getPositionX() > 500 && background1->getPositionX() >  -bgwidth + 1020)
+		{
+			moveBackground();
+			
+		}
+		
+		else
+		{
+			if (player->getPositionX() > 800)
+			{
+				player->setPositionX(player->getPositionX() - 10);
+			}
+			player->setPositionX(player->getPositionX() + 10);
+		}
+		
 	}
 	if (_up)
 	{
-		player->setPositionY(player->getPositionY() + 10);
+		
 	}
 	if (_down)
 	{
@@ -132,7 +149,7 @@ void Player::jump()
 
 void Player::moveBackground()
 {
-	GameScene::background1->setPositionX(GameScene::background1->getPositionX() - 10);
+	background1->setPositionX(background1->getPositionX() - 10);
 }
 
 

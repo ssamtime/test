@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "StartScene.h"
 #include "Player.h"
+#include "Weapon.h"
 
 class GameScene : public cocos2d::Scene
 {
@@ -14,8 +15,9 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameScene);
 
-    cocos2d::Layer* layer1;
-    static cocos2d::Sprite* background1;
+    //cocos2d::Layer* layer1;
+    
 
 };
 
+extern cocos2d::Sprite* background1;

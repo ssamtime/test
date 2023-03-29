@@ -2,16 +2,17 @@
 
 #include "cocos2d.h"
 #include "GameScene.h"
+#include "Player.h"
 
-class Player : public cocos2d::Layer
+class Weapon : public cocos2d::Layer
 {
 public:
-    Player();
-    ~Player();
+    Weapon();
+    ~Weapon();
 
     virtual bool init();
 
-    CREATE_FUNC(Player);
+    CREATE_FUNC(Weapon);
 
     void onEnter();
     void onExit();
@@ -23,20 +24,16 @@ public:
     
     cocos2d::EventListenerKeyboard* _listener;
 
-    bool _left;
-    bool _right;
-    bool _up;
-    bool _down;
-
-    bool isLeftPressed;
-    bool isRightPressed;
+    bool _pressA;
+    bool _pressD;
 
     void update(float f)override;
     
-    void jump();
-    void moveBackground();
+    void makeBullet();
+    void moveBullet();
+
+    cocos2d::Sprite* bullet1;
  
 private:
 
 };
-extern cocos2d::Sprite* player;
