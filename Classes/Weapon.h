@@ -27,11 +27,13 @@ public:
     bool _pressA;
     bool _pressD;
 
+    int sign;
+
     void update(float f)override;
     
     void makeBullet();
     void moveBullet();
-
+    
     cocos2d::Sprite* bullet1;
  
 private:

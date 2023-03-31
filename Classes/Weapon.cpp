@@ -4,6 +4,9 @@
 USING_NS_CC;
 
 cocos2d::Sprite* player;
+bool isLeftPressed;
+bool isRightPressed;
+float upPressedTime;
 
 Weapon::Weapon()
 {
@@ -18,7 +21,8 @@ bool Weapon::init()
     
 	_pressA = _pressD = false;
 
-	
+	sign = 1;
+
 
 	this->scheduleUpdate();
 
@@ -101,8 +105,15 @@ void Weapon::makeBullet()
 
 void Weapon::moveBullet()
 {
-	auto movebullet = MoveBy::create(1, Vec2(800, 0));
+	
+	if (isLeftPressed)
+		sign = -1;
+	else if (isRightPressed)
+		sign = +1;
+	auto movebullet = MoveBy::create(1, Vec2(sign*1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000*sin(upPressedTime*3.1415/180.0f)));
+	
 	bullet1->runAction(movebullet);
+	
 }
 
 

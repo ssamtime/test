@@ -22,6 +22,10 @@ bool Player::init()
     this->addChild(player);
 
 	_left = _right = _up = _down = false;
+	upPressedTime = 0;
+
+
+	
 
 	this->scheduleUpdate();
 
@@ -67,8 +71,10 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	case EventKeyboard::KeyCode::KEY_S:
 		jump();
 		break;
-	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
-		_down = true;
+	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+		_up = true;
+		
+		this->schedule(schedule_selector(Player::countUppressedTime), 0.1f);
 		break;
 	}
 }
@@ -79,13 +85,18 @@ void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = false;
-		
+		isLeftPressed = false;
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = false;
+		isRightPressed = false;
 		break;
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		_up = false;
+		this->unschedule(schedule_selector(Player::countUppressedTime));
+		this->schedule(schedule_selector(Player::discountUppressedTime), 0.1f);
+		if (upPressedTime == 0)
+			this->unschedule(schedule_selector(Player::discountUppressedTime));
 		break;
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 		_down = false;
@@ -128,14 +139,7 @@ void Player::update(float f)
 		}
 		
 	}
-	if (_up)
-	{
-		
-	}
-	if (_down)
-	{
-		
-	}
+	
 }
 
 void Player::jump()
@@ -152,4 +156,18 @@ void Player::moveBackground()
 	background1->setPositionX(background1->getPositionX() - 10);
 }
 
+void Player::discountUppressedTime(float f)
+{
+	if (upPressedTime > 0)
+	{
+		upPressedTime -= 15;
+	}
+}
 
+void Player::countUppressedTime(float f)
+{
+	if (upPressedTime < 90)
+	{
+		upPressedTime += 15;
+	}
+}

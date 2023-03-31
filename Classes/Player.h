@@ -20,7 +20,9 @@ public:
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
 
-    
+    void discountUppressedTime(float f);
+    void countUppressedTime(float f);
+
     cocos2d::EventListenerKeyboard* _listener;
 
     bool _left;
@@ -28,15 +30,17 @@ public:
     bool _up;
     bool _down;
 
-    bool isLeftPressed;
-    bool isRightPressed;
-
     void update(float f)override;
     
     void jump();
     void moveBackground();
+
+    
  
 private:
 
 };
 extern cocos2d::Sprite* player;
+extern  bool isLeftPressed;
+extern bool isRightPressed;
+extern float upPressedTime;
