@@ -34,8 +34,10 @@ public:
     void makeBullet();
     void moveBullet();
     
-    cocos2d::Sprite* bullet1;
+   
  
 private:
 
 };
+
+extern cocos2d::Sprite* playerbullet1;

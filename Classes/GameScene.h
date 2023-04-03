@@ -4,6 +4,7 @@
 #include "StartScene.h"
 #include "Player.h"
 #include "Weapon.h"
+#include "Enemy.h"
 
 class GameScene : public cocos2d::Scene
 {

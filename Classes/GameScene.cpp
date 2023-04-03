@@ -35,6 +35,8 @@ bool GameScene::init()
     Weapon* weapon = Weapon::create();
     addChild(weapon);
 
+    Enemy* enemy = Enemy::create();
+    addChild(enemy);
     return true;
 }
 

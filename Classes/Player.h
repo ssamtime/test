@@ -25,22 +25,21 @@ public:
 
     cocos2d::EventListenerKeyboard* _listener;
 
-    bool _left;
-    bool _right;
+   
     bool _up;
     bool _down;
+
 
     void update(float f)override;
     
     void jump();
     void moveBackground();
 
-    
  
 private:
 
 };
 extern cocos2d::Sprite* player;
-extern  bool isLeftPressed;
-extern bool isRightPressed;
+extern  bool _left;
+extern bool _right;
 extern float upPressedTime;

@@ -25,8 +25,6 @@ bool Player::init()
 	upPressedTime = 0;
 
 
-	
-
 	this->scheduleUpdate();
 
 	return true;
@@ -58,22 +56,20 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = true;
-		isLeftPressed = true;
-		if(isRightPressed)
-			player->setFlippedX(true);
+		
+		player->setFlippedX(true);
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = true;
-		isRightPressed = true;
-		if (isLeftPressed)
-			player->setFlippedX(false);
+		
+		player->setFlippedX(false);
 		break;
 	case EventKeyboard::KeyCode::KEY_S:
 		jump();
 		break;
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		_up = true;
-		
+		this->unschedule(schedule_selector(Player::discountUppressedTime));
 		this->schedule(schedule_selector(Player::countUppressedTime), 0.1f);
 		break;
 	}
@@ -85,18 +81,20 @@ void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = false;
-		isLeftPressed = false;
+		
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = false;
-		isRightPressed = false;
+		
 		break;
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
+
 		_up = false;
 		this->unschedule(schedule_selector(Player::countUppressedTime));
 		this->schedule(schedule_selector(Player::discountUppressedTime), 0.1f);
 		if (upPressedTime == 0)
 			this->unschedule(schedule_selector(Player::discountUppressedTime));
+		
 		break;
 	case EventKeyboard::KeyCode::KEY_DOWN_ARROW:
 		_down = false;
@@ -123,7 +121,7 @@ void Player::update(float f)
 		float bgwidth = background1->getContentSize().width;
 		float playerpositionx = background1->getPositionX();
 		
-		if (player->getPositionX() > 500 && background1->getPositionX() >  -bgwidth + 1020)
+		if (player->getPositionX() > 500 && background1->getPositionX() >  -bgwidth + 1100)
 		{
 			moveBackground();
 			

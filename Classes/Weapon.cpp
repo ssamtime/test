@@ -4,9 +4,11 @@
 USING_NS_CC;
 
 cocos2d::Sprite* player;
-bool isLeftPressed;
-bool isRightPressed;
+bool _left;
+bool _right;
 float upPressedTime;
+
+cocos2d::Sprite* enemy1;
 
 Weapon::Weapon()
 {
@@ -23,6 +25,11 @@ bool Weapon::init()
 
 	sign = 1;
 
+	playerbullet1 = Sprite::create("bullet.png");
+	playerbullet1->setAnchorPoint(Vec2(0, 0));
+	playerbullet1->setPosition(player->getPositionX()  , player->getPositionY() + -1000);
+	playerbullet1->setZOrder(5);
+	this->addChild(playerbullet1);
 
 	this->scheduleUpdate();
 
@@ -79,42 +86,40 @@ void Weapon::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 	}
 }
 
-void Weapon::update(float f)
-{
-	
-	if (_pressA)
-	{
-		
-	}
-	if (_pressD)
-	{
-		
-	}
-}
+
 
 void Weapon::makeBullet()
 {
-	bullet1 = Sprite::create("bullet.png");
-	bullet1->setAnchorPoint(Vec2(0, 0));
-	bullet1->setPosition(player->getPositionX() + 100, player->getPositionY()+50);
-	bullet1->setZOrder(5);
+	playerbullet1 = Sprite::create("bullet.png");
+	playerbullet1->setAnchorPoint(Vec2(0, 0));
+	
+	if (_left)
+		sign = -1;
+	else if (_right)
+		sign = +1;
+	playerbullet1->setPosition(player->getPositionX()+50 + sign*55, player->getPositionY() + 55);
+	
+	playerbullet1->setZOrder(5);
 	moveBullet();
 
-	this->addChild(bullet1);
+	this->addChild(playerbullet1);
 }
 
 void Weapon::moveBullet()
 {
 	
-	if (isLeftPressed)
+	if (_left)
 		sign = -1;
-	else if (isRightPressed)
+	else if (_right)
 		sign = +1;
-	auto movebullet = MoveBy::create(1, Vec2(sign*1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000*sin(upPressedTime*3.1415/180.0f)));
+	auto movebullet = MoveBy::create(0.8, Vec2(sign*1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000*sin(upPressedTime*3.1415/180.0f)));
 	
-	bullet1->runAction(movebullet);
+	playerbullet1->runAction(movebullet);
 	
 }
 
+void Weapon::update(float f)
+{
 
+}
 
