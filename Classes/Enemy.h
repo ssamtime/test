@@ -23,6 +23,10 @@ public:
 
 	void update(float f);
 
+	void enemy1dead();
+
+	bool isCollided;
+
 private:
 	
 };

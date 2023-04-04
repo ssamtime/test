@@ -147,6 +147,12 @@ void Player::jump()
 	auto sequence = Sequence::create(jump, reversejump, nullptr);
 	
 	player->runAction(sequence);
+
+	//if (!mySprite->getActionByTag(1)) {
+	//	auto moveBy = MoveBy::create(2, Vec2(100, 0));
+	//	auto action = Sequence::create(moveBy, nullptr);
+	//	action->setTag(1); // 태그를 지정하여 이후에 실행한 애니메이션과 구분합니다.
+	//	mySprite->runAction(action);
 }
 
 void Player::moveBackground()

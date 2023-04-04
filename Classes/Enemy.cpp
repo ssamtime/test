@@ -4,6 +4,8 @@ USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
 
+int i;
+
 Enemy::Enemy()
 {
 }
@@ -24,15 +26,44 @@ bool Enemy::init()
 
 	this->scheduleUpdate();
 
+	isCollided = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
+
 	return true;
 }
 
 void Enemy::update(float f)
 {
-	if (enemy1->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()))
+	if (enemy1->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided)
 	{
-		log("Collision! ");
+		enemy1dead();
+		isCollided = false;
 	}
+}
+
+void Enemy::enemy1dead()
+{
+	auto sprite1 = Sprite::create("arabianDeath.png");
+	auto texture1 = sprite1->getTexture();
+
+	auto animation = Animation::create();
+	animation->setDelayPerUnit(0.12);
+
+	for (i = 0; i < 2; i++)
+	{
+		int column = i % 11;
+		animation->addSpriteFrameWithTexture(texture1, Rect(column * 48, 0, 48, 50));
+	}
+	for (i = 0; i <10; i++)
+	{
+		int column = i % 11;
+		animation->addSpriteFrameWithTexture(texture1, Rect(96+column * 58, 0, 58, 50));
+	}
+	
+	auto animate = Animate::create(animation);
+	auto delay = DelayTime::create(3.0);
+	auto sequence = Sequence::create(animate, delay, nullptr);
+	enemy1->runAction(sequence);
+	
 }
 
 
