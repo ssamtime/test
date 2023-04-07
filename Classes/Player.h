@@ -29,12 +29,14 @@ public:
     bool _up;
     bool _down;
 
+    bool isCollided;
 
     void update(float f)override;
     
     void jump();
     void moveBackground();
 
+    void playerDeath();
  
 private:
 

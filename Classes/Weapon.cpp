@@ -8,7 +8,6 @@ bool _left;
 bool _right;
 float upPressedTime;
 
-cocos2d::Sprite* enemy1;
 
 Weapon::Weapon()
 {

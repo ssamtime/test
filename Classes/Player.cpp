@@ -3,6 +3,9 @@
 USING_NS_CC;
 
 cocos2d::Sprite* background1;
+cocos2d::Sprite* arabian1;
+cocos2d::Sprite* arabian2;
+cocos2d::Sprite* arabian3;
 
 Player::Player()
 {
@@ -138,27 +141,34 @@ void Player::update(float f)
 		
 	}
 	
+	if (arabian1->getBoundingBox().intersectsRect(player->getBoundingBox()) ||
+		arabian2->getBoundingBox().intersectsRect(player->getBoundingBox()) ||
+		arabian3->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollided)
+	{
+		playerDeath();
+		
+		isCollided = false;
+	}
 }
 
 void Player::jump()
 {
-	auto jump = MoveBy::create(0.3, Vec2(0, 100));
-	auto reversejump = jump->reverse();
-	auto sequence = Sequence::create(jump, reversejump, nullptr);
-	
-	player->runAction(sequence);
-
-	//if (!mySprite->getActionByTag(1)) {
-	//	auto moveBy = MoveBy::create(2, Vec2(100, 0));
-	//	auto action = Sequence::create(moveBy, nullptr);
-	//	action->setTag(1); // 태그를 지정하여 이후에 실행한 애니메이션과 구분합니다.
-	//	mySprite->runAction(action);
+	if (player->getActionByTag(1)==0)
+	{
+		auto jump = MoveBy::create(0.3, Vec2(0, 100));
+		auto reversejump = jump->reverse();
+		auto sequence = Sequence::create(jump, reversejump, nullptr);
+		sequence->setTag(1);
+		player->runAction(sequence);
+		
+	}
 }
 
 void Player::moveBackground()
 {
 	background1->setPositionX(background1->getPositionX() - 10);
 }
+
 
 void Player::discountUppressedTime(float f)
 {
@@ -174,4 +184,41 @@ void Player::countUppressedTime(float f)
 	{
 		upPressedTime += 15;
 	}
+}
+
+void Player::playerDeath()
+{
+	this->getEventDispatcher()->setEnabled(false);
+
+	auto deathanimation = Animation::create();
+	deathanimation->setDelayPerUnit(0.12);
+
+	deathanimation->addSpriteFrameWithFile("playerdeath1.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath2.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath3.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath4.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath5.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath6.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath7.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath8.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath9.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath10.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath11.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath12.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath13.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath14.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath15.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath16.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath17.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath18.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath19.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath20.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath21.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath22.png");
+	deathanimation->addSpriteFrameWithFile("playerdeath23.png");
+
+	auto deathanimate = Animate::create(deathanimation);
+	player->runAction(deathanimate);
+	
+	
 }
