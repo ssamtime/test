@@ -1,4 +1,4 @@
-#include "Weapon.h"
+
 #include "Player.h"
 
 USING_NS_CC;
@@ -6,7 +6,10 @@ USING_NS_CC;
 cocos2d::Sprite* player;
 bool _left;
 bool _right;
+bool _up;
+bool RIGHT;
 float upPressedTime;
+
 
 
 Weapon::Weapon()
@@ -30,9 +33,16 @@ bool Weapon::init()
 	playerbullet1->setZOrder(5);
 	this->addChild(playerbullet1);
 
+	machinegunCapsule = Sprite::create("machinegunCapsule.png");
+	machinegunCapsule->setAnchorPoint(Vec2(0, 0));
+	machinegunCapsule->setPosition(Vec2(1600, 100));
+	machinegunCapsule->setZOrder(6);
+	machinegunCapsule->setScale(3);
+	this->addChild(machinegunCapsule);
+
+	isMachinegun = false;
+
 	this->scheduleUpdate();
-
-
 	return true;
 }
 
@@ -62,7 +72,14 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	{
 	
 	case EventKeyboard::KeyCode::KEY_A:
-		makeBullet();
+		if (!isMachinegun)
+		{
+			makeBullet();
+		}
+		else
+		{
+			makeMachinegun();
+		}
 		_pressA = true;
 		break;
 	case EventKeyboard::KeyCode::KEY_D:
@@ -92,33 +109,55 @@ void Weapon::makeBullet()
 	playerbullet1 = Sprite::create("bullet.png");
 	playerbullet1->setAnchorPoint(Vec2(0, 0));
 	
-	if (_left)
+	if (!RIGHT)
 		sign = -1;
-	else if (_right)
+	else if (RIGHT)
 		sign = +1;
 	playerbullet1->setPosition(player->getPositionX()+50 + sign*55, player->getPositionY() + 55);
 	
 	playerbullet1->setZOrder(5);
-	moveBullet();
+
+	auto movebullet = MoveBy::create(0.8, Vec2(sign * 1000 * (!_up), 1000 * _up));
+
+	playerbullet1->runAction(movebullet);
 
 	this->addChild(playerbullet1);
 }
 
-void Weapon::moveBullet()
+void Weapon::makeMachinegun()
 {
+	playerbullet1 = Sprite::create("machinegun1.png");
+	playerbullet1->setScale(2);
+	playerbullet1->setAnchorPoint(Vec2(0, 0));
 	
-	if (_left)
+	if (!RIGHT)
+	{
 		sign = -1;
-	else if (_right)
+		playerbullet1->setFlippedX(true);
+		playerbullet1->setRotation(upPressedTime);
+	}
+	else if (RIGHT)
+	{
 		sign = +1;
-	auto movebullet = MoveBy::create(0.8, Vec2(sign*1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000*sin(upPressedTime*3.1415/180.0f)));
-	
-	playerbullet1->runAction(movebullet);
-	
+		playerbullet1->setFlippedX(false);
+		playerbullet1->setRotation(-upPressedTime);
+	}
+
+	playerbullet1->setPosition(player->getPositionX() + 50 + sign * 55, player->getPositionY() + 55);
+
+	playerbullet1->setZOrder(5);
+
+	auto moveMachinegunbullet = MoveBy::create(0.8, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
+
+	playerbullet1->runAction(moveMachinegunbullet);
+
+	this->addChild(playerbullet1);
 }
+
+
 
 void Weapon::update(float f)
 {
-
+	
 }
 

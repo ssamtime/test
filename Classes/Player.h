@@ -2,6 +2,8 @@
 
 #include "cocos2d.h"
 #include "GameScene.h"
+#include "Enemy.h"
+#include "Weapon.h"
 
 class Player : public cocos2d::Layer
 {
@@ -26,11 +28,14 @@ public:
     cocos2d::EventListenerKeyboard* _listener;
 
    
-    bool _up;
+    
     bool _down;
 
-    bool isCollided;
+    bool isCollided1;
+    bool isCollided2;
+    bool isCollided3;
 
+    bool playerAlive;
     void update(float f)override;
     
     void jump();
@@ -42,6 +47,8 @@ private:
 
 };
 extern cocos2d::Sprite* player;
-extern  bool _left;
+extern bool _left;
 extern bool _right;
+extern bool RIGHT;
+extern bool _up;
 extern float upPressedTime;

@@ -7,6 +7,13 @@ cocos2d::Sprite* arabian1;
 cocos2d::Sprite* arabian2;
 cocos2d::Sprite* arabian3;
 
+bool arabian1Alive;
+bool arabian2Alive;
+bool arabian3Alive;
+
+cocos2d::Sprite* machinegunCapsule;
+bool isMachinegun;
+
 Player::Player()
 {
 }
@@ -17,6 +24,8 @@ Player::~Player()
 
 bool Player::init()
 {
+	
+
     player = Sprite::create("Fio.png");
     player->setScale(3);
     player->setAnchorPoint(Vec2(0, 0));
@@ -24,10 +33,30 @@ bool Player::init()
     player->setZOrder(5);
     this->addChild(player);
 
+	auto mergeanimation = Animation::create();
+	mergeanimation->setDelayPerUnit(0.08);
+
+	mergeanimation->addSpriteFrameWithFile("playeremerge1.png");
+	mergeanimation->addSpriteFrameWithFile("playeremerge2.png");
+	mergeanimation->addSpriteFrameWithFile("playeremerge3.png");
+	mergeanimation->addSpriteFrameWithFile("playeremerge4.png");
+	mergeanimation->addSpriteFrameWithFile("playeremerge5.png");
+	mergeanimation->addSpriteFrameWithFile("playeremerge6.png");
+	mergeanimation->addSpriteFrameWithFile("Fio.png");
+
+	auto mergeanimate = Animate::create(mergeanimation);
+	player->runAction(mergeanimate);
+
+	playerAlive = true;
+	
+	RIGHT=true;
 	_left = _right = _up = _down = false;
 	upPressedTime = 0;
 
-
+	isCollided1 = true;
+	isCollided2 = true;
+	isCollided3 = true;
+	
 	this->scheduleUpdate();
 
 	return true;
@@ -59,12 +88,12 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	{
 	case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
 		_left = true;
-		
+		RIGHT = false;
 		player->setFlippedX(true);
 		break;
 	case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
 		_right = true;
-		
+		RIGHT=true;
 		player->setFlippedX(false);
 		break;
 	case EventKeyboard::KeyCode::KEY_S:
@@ -73,7 +102,7 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		_up = true;
 		this->unschedule(schedule_selector(Player::discountUppressedTime));
-		this->schedule(schedule_selector(Player::countUppressedTime), 0.1f);
+		this->schedule(schedule_selector(Player::countUppressedTime), 0.2f);
 		break;
 	}
 }
@@ -94,7 +123,7 @@ void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 
 		_up = false;
 		this->unschedule(schedule_selector(Player::countUppressedTime));
-		this->schedule(schedule_selector(Player::discountUppressedTime), 0.1f);
+		this->schedule(schedule_selector(Player::discountUppressedTime), 0.2f);
 		if (upPressedTime == 0)
 			this->unschedule(schedule_selector(Player::discountUppressedTime));
 		
@@ -127,7 +156,7 @@ void Player::update(float f)
 		if (player->getPositionX() > 500 && background1->getPositionX() >  -bgwidth + 1100)
 		{
 			moveBackground();
-			
+			machinegunCapsule->setPositionX(machinegunCapsule->getPositionX() - 10);
 		}
 		
 		else
@@ -141,13 +170,29 @@ void Player::update(float f)
 		
 	}
 	
-	if (arabian1->getBoundingBox().intersectsRect(player->getBoundingBox()) ||
-		arabian2->getBoundingBox().intersectsRect(player->getBoundingBox()) ||
-		arabian3->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollided)
+	if (arabian1->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollided1&& arabian1Alive && playerAlive)
 	{
 		playerDeath();
-		
-		isCollided = false;
+		playerAlive = false;
+		isCollided1 = false;
+	}
+	if (arabian2->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollided2 && arabian2Alive && playerAlive)
+	{
+		playerDeath();
+		playerAlive = false;
+		isCollided2 = false;
+	}
+	if (arabian3->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollided3 && arabian3Alive && playerAlive)
+	{
+		playerDeath();
+		playerAlive = false;
+		isCollided3 = false;
+	}
+	
+	if (machinegunCapsule->getBoundingBox().intersectsRect(player->getBoundingBox()))
+	{
+		isMachinegun = true;
+		machinegunCapsule->setVisible(false);
 	}
 }
 
@@ -188,6 +233,15 @@ void Player::countUppressedTime(float f)
 
 void Player::playerDeath()
 {
+	player->stopAllActions();
+	background1->stopAllActions();
+	if (player->getPositionY() > 100)
+	{
+		auto pmoveto = MoveTo::create(1, Vec2(player->getPositionX(), 100));
+		player->runAction(pmoveto);
+	}
+	_right = false;
+	
 	this->getEventDispatcher()->setEnabled(false);
 
 	auto deathanimation = Animation::create();

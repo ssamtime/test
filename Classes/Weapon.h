@@ -3,6 +3,7 @@
 #include "cocos2d.h"
 #include "GameScene.h"
 #include "Player.h"
+#include "Weapon.h"
 
 class Weapon : public cocos2d::Layer
 {
@@ -29,11 +30,13 @@ public:
 
     int sign;
 
+    
+
     void update(float f)override;
     
     void makeBullet();
-    void moveBullet();
     
+    void makeMachinegun();
    
  
 private:
@@ -41,3 +44,5 @@ private:
 };
 
 extern cocos2d::Sprite* playerbullet1;
+extern cocos2d::Sprite* machinegunCapsule;
+extern bool isMachinegun;

@@ -20,19 +20,27 @@ public:
 	bool isCollided1;
 	bool isCollided2;
 	bool isCollided3;
+	
+	
 
-	cocos2d::Action* rep;
+	cocos2d::Animation* animation2;
+	cocos2d::ActionInterval* animate2;
+
+	cocos2d::Action* rep1;
 	cocos2d::Action* pMoveBy1;
-
-	/*void makeBullet();
-	void moveBullet();*/
+	cocos2d::Action* rep2;
+	cocos2d::Action* pMoveBy2;
+	cocos2d::Action* rep3;
+	cocos2d::Action* pMoveBy3;
 
 	cocos2d::Sprite* enemybullet1;
 
 	void update(float f);
 
-	void arabiandeath(cocos2d::Sprite* obj);
-	void arabianrunning(cocos2d::Sprite* obj);
+	void arabiandeath(cocos2d::Sprite* obj, int n1, int n2);
+	void arabianrunning1(cocos2d::Sprite* obj);
+	void arabianrunning2(cocos2d::Sprite* obj);
+	void arabianrunning3(cocos2d::Sprite* obj);
 
 	
 
@@ -41,3 +49,6 @@ public:
 extern cocos2d::Sprite* arabian1;
 extern cocos2d::Sprite* arabian2;
 extern cocos2d::Sprite* arabian3;
+extern bool arabian1Alive;
+extern bool arabian2Alive;
+extern bool arabian3Alive;
