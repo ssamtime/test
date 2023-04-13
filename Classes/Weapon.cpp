@@ -126,26 +126,29 @@ void Weapon::makeBullet()
 
 void Weapon::makeMachinegun()
 {
-	playerbullet1 = Sprite::create("machinegun1.png");
-	playerbullet1->setScale(2);
-	playerbullet1->setAnchorPoint(Vec2(0, 0));
 	
 	if (!RIGHT)
 	{
+		playerbullet1 = Sprite::create("machinegun2.png");
+		playerbullet1->setScale(2);
+		playerbullet1->setAnchorPoint(Vec2(1, 0));
 		sign = -1;
-		playerbullet1->setFlippedX(true);
+		playerbullet1->setPosition(player->getPositionX() +45 + sign * 55, player->getPositionY() + 60);
+		playerbullet1->setZOrder(5);
 		playerbullet1->setRotation(upPressedTime);
 	}
 	else if (RIGHT)
 	{
+		playerbullet1 = Sprite::create("machinegun1.png");
+		playerbullet1->setScale(2);
+		playerbullet1->setAnchorPoint(Vec2(0, 0));
 		sign = +1;
-		playerbullet1->setFlippedX(false);
+		playerbullet1->setPosition(player->getPositionX() + 85 + sign * 55, player->getPositionY() + 60);
+		playerbullet1->setZOrder(5);
 		playerbullet1->setRotation(-upPressedTime);
+		
 	}
 
-	playerbullet1->setPosition(player->getPositionX() + 50 + sign * 55, player->getPositionY() + 55);
-
-	playerbullet1->setZOrder(5);
 
 	auto moveMachinegunbullet = MoveBy::create(0.8, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
 

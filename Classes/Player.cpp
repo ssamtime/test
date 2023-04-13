@@ -6,7 +6,9 @@ cocos2d::Sprite* background1;
 cocos2d::Sprite* arabian1;
 cocos2d::Sprite* arabian2;
 cocos2d::Sprite* arabian3;
-
+cocos2d::Sprite* boss;
+cocos2d::Sprite* leftengine;
+cocos2d::Sprite* rightengine;
 bool arabian1Alive;
 bool arabian2Alive;
 bool arabian3Alive;
@@ -34,7 +36,7 @@ bool Player::init()
     this->addChild(player);
 
 	auto mergeanimation = Animation::create();
-	mergeanimation->setDelayPerUnit(0.08);
+	mergeanimation->setDelayPerUnit(0.06);
 
 	mergeanimation->addSpriteFrameWithFile("playeremerge1.png");
 	mergeanimation->addSpriteFrameWithFile("playeremerge2.png");
@@ -102,7 +104,7 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 	case EventKeyboard::KeyCode::KEY_UP_ARROW:
 		_up = true;
 		this->unschedule(schedule_selector(Player::discountUppressedTime));
-		this->schedule(schedule_selector(Player::countUppressedTime), 0.2f);
+		this->schedule(schedule_selector(Player::countUppressedTime), 0.15f);
 		break;
 	}
 }
@@ -123,7 +125,7 @@ void Player::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 
 		_up = false;
 		this->unschedule(schedule_selector(Player::countUppressedTime));
-		this->schedule(schedule_selector(Player::discountUppressedTime), 0.2f);
+		this->schedule(schedule_selector(Player::discountUppressedTime), 0.15f);
 		if (upPressedTime == 0)
 			this->unschedule(schedule_selector(Player::discountUppressedTime));
 		
@@ -156,7 +158,24 @@ void Player::update(float f)
 		if (player->getPositionX() > 500 && background1->getPositionX() >  -bgwidth + 1100)
 		{
 			moveBackground();
+
 			machinegunCapsule->setPositionX(machinegunCapsule->getPositionX() - 10);
+
+			boss->setPositionX(boss->getPositionX() - 10);
+			leftengine->setPositionX(leftengine->getPositionX() - 10);
+			
+			if (!arabian1Alive)
+			{
+				arabian1->setPositionX(arabian1->getPositionX() - 10);
+			}
+			if (!arabian2Alive)
+			{
+				arabian2->setPositionX(arabian2->getPositionX() - 10);
+			}
+			if (!arabian3Alive)
+			{
+				arabian3->setPositionX(arabian3->getPositionX() - 10);
+			}
 		}
 		
 		else

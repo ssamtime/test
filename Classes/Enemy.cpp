@@ -4,7 +4,8 @@ USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
 
-
+//보스만들기
+//목숨 총알 폭탄만들기
 
 Enemy::Enemy()
 {
@@ -40,13 +41,44 @@ bool Enemy::init()
 	this->addChild(arabian3);
 	arabianrunning3(arabian3);
 
+	boss = Sprite::create("boss1.png");
+	boss->setScale(3);
+	boss->setAnchorPoint(Vec2(0, 0));
+	boss->setPosition(Vec2(300, 250));
+	boss->setZOrder(5);
+	this->addChild(boss);
+
+	/*leftengine->Sprite::create("leftnormal.png");
+	leftengine->setScale(3);
+	leftengine->setAnchorPoint(Vec2(0, 0));
+	leftengine->setPosition(Vec2(boss->getPositionX() + 25, boss->getPositionY() + 150));
+	leftengine->setZOrder(6);
+	this->addChild(leftengine);*/
+
+	/*auto leftengineanimation = Animation::create();
+	leftengineanimation->setDelayPerUnit(0.12);
+	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftred.png");
+	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftyellow.png");
+	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftblue.png");
+	auto leftengineanimate = Animate::create(leftengineanimation);
+	auto leftengineRep = RepeatForever::create(leftengineanimate);
+	leftengine->runAction(leftengineRep);*/
+
+	
+
+
+	
+	
+
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;
 	isCollided3 = true;
 	arabian1Alive = true;
 	arabian2Alive = true;
 	arabian3Alive = true;
-
 
 
 	this->scheduleUpdate();
@@ -103,6 +135,7 @@ void Enemy::arabiandeath(cocos2d::Sprite* obj,int n1,int n2)
 	
 	auto animate = Animate::create(animation);
 	obj->runAction(animate);
+	
 	
 }
 

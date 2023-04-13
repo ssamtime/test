@@ -49,6 +49,10 @@ public:
 extern cocos2d::Sprite* arabian1;
 extern cocos2d::Sprite* arabian2;
 extern cocos2d::Sprite* arabian3;
+extern cocos2d::Sprite* boss;
+extern cocos2d::Sprite* leftengine;
+extern cocos2d::Sprite* rightengine;
+
 extern bool arabian1Alive;
 extern bool arabian2Alive;
 extern bool arabian3Alive;
