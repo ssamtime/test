@@ -48,30 +48,102 @@ bool Enemy::init()
 	boss->setZOrder(5);
 	this->addChild(boss);
 
-	/*leftengine->Sprite::create("leftnormal.png");
-	leftengine->setScale(3);
+	leftengine = Sprite::create("leftNormal.png");
 	leftengine->setAnchorPoint(Vec2(0, 0));
-	leftengine->setPosition(Vec2(boss->getPositionX() + 25, boss->getPositionY() + 150));
+	leftengine->setPosition(Vec2(boss->getPositionX() + 23, boss->getPositionY() + 151));
+	leftengine->setScale(3);
 	leftengine->setZOrder(6);
-	this->addChild(leftengine);*/
+	this->addChild(leftengine);
 
-	/*auto leftengineanimation = Animation::create();
-	leftengineanimation->setDelayPerUnit(0.12);
-	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
-	leftengineanimation->addSpriteFrameWithFile("leftred.png");
-	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
-	leftengineanimation->addSpriteFrameWithFile("leftyellow.png");
-	leftengineanimation->addSpriteFrameWithFile("leftnormal.png");
-	leftengineanimation->addSpriteFrameWithFile("leftblue.png");
+	auto leftengineanimation = Animation::create();
+	leftengineanimation->setDelayPerUnit(0.4);
+	leftengineanimation->addSpriteFrameWithFile("leftNormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftRed.png");
+	leftengineanimation->addSpriteFrameWithFile("leftNormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftYellow.png");
+	leftengineanimation->addSpriteFrameWithFile("leftNormal.png");
+	leftengineanimation->addSpriteFrameWithFile("leftBlue.png");
 	auto leftengineanimate = Animate::create(leftengineanimation);
 	auto leftengineRep = RepeatForever::create(leftengineanimate);
-	leftengine->runAction(leftengineRep);*/
+	leftengine->runAction(leftengineRep);
+
+	rightengine = Sprite::create("rightNormal.png");
+	rightengine->setAnchorPoint(Vec2(0, 0));
+	rightengine->setPosition(Vec2(boss->getPositionX() + 600, boss->getPositionY() + 150));
+	rightengine->setScale(3);
+	rightengine->setZOrder(6);
+	this->addChild(rightengine);
+
+	auto rightengineanimation = Animation::create();
+	rightengineanimation->setDelayPerUnit(0.4);
+	rightengineanimation->addSpriteFrameWithFile("rightNormal.png");
+	rightengineanimation->addSpriteFrameWithFile("rightRed.png");
+	rightengineanimation->addSpriteFrameWithFile("rightNormal.png");
+	rightengineanimation->addSpriteFrameWithFile("rightYellow.png");
+	rightengineanimation->addSpriteFrameWithFile("rightNormal.png");
+	rightengineanimation->addSpriteFrameWithFile("rightBlue.png");
+	auto rightengineanimate = Animate::create(rightengineanimation);
+	auto rightengineRep = RepeatForever::create(rightengineanimate);
+	rightengine->runAction(rightengineRep);
+
+	/*auto leftsmallflame = Sprite::create("hollow.png");
+	leftsmallflame->setAnchorPoint(Vec2(0, 0));
+	leftsmallflame->setPosition(Vec2(boss->getPositionX() + 97, boss->getPositionY() -13));
+	leftsmallflame->setScale(3);
+	leftsmallflame->setZOrder(6);
+	this->addChild(leftsmallflame);
+
+	auto leftsmallflameanimation = Animation::create();
+	leftsmallflameanimation->setDelayPerUnit(0.15);
+	leftsmallflameanimation->addSpriteFrameWithFile("smallflame1.png");
+	leftsmallflameanimation->addSpriteFrameWithFile("smallflame2.png");
+	leftsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
+	leftsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
+	auto leftsmallflameanimate = Animate::create(leftsmallflameanimation);
+	auto leftsmallflameRep = RepeatForever::create(leftsmallflameanimate);
+	leftsmallflame->runAction(leftsmallflameRep);
+
+	auto rightsmallflame = Sprite::create("hollow.png");
+	rightsmallflame->setFlippedX(true);
+	rightsmallflame->setAnchorPoint(Vec2(0, 0));
+	rightsmallflame->setPosition(Vec2(boss->getPositionX() + 623, boss->getPositionY() - 13));
+	rightsmallflame->setScale(3);
+	rightsmallflame->setZOrder(6);
+	this->addChild(rightsmallflame);
+
+	auto rightsmallflameanimation = Animation::create();
+	rightsmallflameanimation->setDelayPerUnit(0.15);
+	rightsmallflameanimation->addSpriteFrameWithFile("smallflame1.png");
+	rightsmallflameanimation->addSpriteFrameWithFile("smallflame2.png");
+	rightsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
+	rightsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
+	auto rightsmallflameanimate = Animate::create(rightsmallflameanimation);
+	auto rightsmallflameRep = RepeatForever::create(rightsmallflameanimate);
+	rightsmallflame->runAction(rightsmallflameRep);*/
 
 	
+	auto leftflame = Sprite::create("hollow.png");
+	leftflame->setAnchorPoint(Vec2(0, 0));
+	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
+	leftflame->setScale(3);
+	leftflame->setZOrder(6);
+	this->addChild(leftflame);
 
+	auto enginefiresprite = Sprite::create("flamerow1.png");
+	auto enginefiretexture = enginefiresprite->getTexture();
+	auto animation = Animation::create();
+	animation->setDelayPerUnit(0.2);
 
 	
+	for (int i = 0; i < 9; i++)
+	{
+		animation->addSpriteFrameWithTexture(enginefiretexture, Rect( i* 50, 0, 50, 160));
+	}
 	
+	auto animate = Animate::create(animation);
+	auto rep2 = RepeatForever::create(animate);
+	leftflame->runAction(rep2);
+
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;

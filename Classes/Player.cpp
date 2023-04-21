@@ -163,6 +163,7 @@ void Player::update(float f)
 
 			boss->setPositionX(boss->getPositionX() - 10);
 			leftengine->setPositionX(leftengine->getPositionX() - 10);
+			rightengine->setPositionX(rightengine->getPositionX() - 10);
 			
 			if (!arabian1Alive)
 			{

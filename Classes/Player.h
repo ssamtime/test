@@ -27,7 +27,6 @@ public:
 
     cocos2d::EventListenerKeyboard* _listener;
 
-   
     
     bool _down;
 

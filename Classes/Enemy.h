@@ -21,7 +21,6 @@ public:
 	bool isCollided2;
 	bool isCollided3;
 	
-	
 
 	cocos2d::Animation* animation2;
 	cocos2d::ActionInterval* animate2;
@@ -43,7 +42,6 @@ public:
 	void arabianrunning3(cocos2d::Sprite* obj);
 
 	
-
 };
 
 extern cocos2d::Sprite* arabian1;
