@@ -162,8 +162,6 @@ void Player::update(float f)
 			machinegunCapsule->setPositionX(machinegunCapsule->getPositionX() - 10);
 
 			boss->setPositionX(boss->getPositionX() - 10);
-			leftengine->setPositionX(leftengine->getPositionX() - 10);
-			rightengine->setPositionX(rightengine->getPositionX() - 10);
 			
 			if (!arabian1Alive)
 			{

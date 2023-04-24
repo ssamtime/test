@@ -86,7 +86,7 @@ bool Enemy::init()
 	auto rightengineRep = RepeatForever::create(rightengineanimate);
 	rightengine->runAction(rightengineRep);
 
-	/*auto leftsmallflame = Sprite::create("hollow.png");
+	leftsmallflame = Sprite::create("hollow.png");
 	leftsmallflame->setAnchorPoint(Vec2(0, 0));
 	leftsmallflame->setPosition(Vec2(boss->getPositionX() + 97, boss->getPositionY() -13));
 	leftsmallflame->setScale(3);
@@ -99,9 +99,9 @@ bool Enemy::init()
 	leftsmallflameanimation->addSpriteFrameWithFile("smallflame2.png");
 	leftsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
 	leftsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
-	auto leftsmallflameanimate = Animate::create(leftsmallflameanimation);
-	auto leftsmallflameRep = RepeatForever::create(leftsmallflameanimate);
-	leftsmallflame->runAction(leftsmallflameRep);
+	leftsmallflameanimate = Animate::create(leftsmallflameanimation);
+	/*auto leftsmallflameRep = RepeatForever::create(leftsmallflameanimate);
+	leftsmallflame->runAction(leftsmallflameRep);*/
 
 	auto rightsmallflame = Sprite::create("hollow.png");
 	rightsmallflame->setFlippedX(true);
@@ -119,31 +119,66 @@ bool Enemy::init()
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
 	auto rightsmallflameanimate = Animate::create(rightsmallflameanimation);
 	auto rightsmallflameRep = RepeatForever::create(rightsmallflameanimate);
-	rightsmallflame->runAction(rightsmallflameRep);*/
+	/*rightsmallflame->runAction(rightsmallflameRep);*/
 
 	
-	auto leftflame = Sprite::create("hollow.png");
+	leftflame = Sprite::create("hollow.png");
 	leftflame->setAnchorPoint(Vec2(0, 0));
 	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
 	leftflame->setScale(3);
 	leftflame->setZOrder(6);
 	this->addChild(leftflame);
 
-	auto enginefiresprite = Sprite::create("flamerow1.png");
-	auto enginefiretexture = enginefiresprite->getTexture();
-	auto animation = Animation::create();
-	animation->setDelayPerUnit(0.2);
+	rightflame = Sprite::create("hollow.png");
+	rightflame->setAnchorPoint(Vec2(0, 0));
+	rightflame->setPosition(Vec2(boss->getPositionX() + 620, boss->getPositionY() - 352));
+	rightflame->setScale(3);
+	rightflame->setZOrder(6);
+	this->addChild(rightflame);
 
-	
+	auto enginefiresprite1 = Sprite::create("flamerow1.png");
+	auto enginefiretexture1 = enginefiresprite1->getTexture();
+	auto animation1 = Animation::create();
+	animation1->setDelayPerUnit(0.2);
+
 	for (int i = 0; i < 9; i++)
 	{
-		animation->addSpriteFrameWithTexture(enginefiretexture, Rect( i* 50, 0, 50, 160));
+		animation1->addSpriteFrameWithTexture(enginefiretexture1, Rect( i* 50, 0, 50, 160));
 	}
 	
-	auto animate = Animate::create(animation);
-	auto rep2 = RepeatForever::create(animate);
-	leftflame->runAction(rep2);
+	leftflameanimate1 = Animate::create(animation1);
+	leftflameanimate1->retain();
 
+	auto enginefiresprite2 = Sprite::create("flamerow2.png");
+	auto enginefiretexture2 = enginefiresprite2->getTexture();
+	auto animation2 = Animation::create();
+	animation2->setDelayPerUnit(0.2);
+
+	for (int i = 0; i < 12; i++)
+	{
+		animation2->addSpriteFrameWithTexture(enginefiretexture2, Rect(i * 50, 0, 50, 160));
+	}
+
+	leftflameanimate2 = Animate::create(animation2);
+	leftflameanimate2->retain();
+	rightflame->runAction(leftflameanimate2);
+
+	//// 두 애니메이션을 연속해서 실행하는 애니메이션 생성
+	//auto sequence = Sequence::create(Animate::create(animation1), Animate::create(animation2), nullptr);
+
+	//// leftflameanimate1 변수에 애니메이션 저장
+	//leftflameanimate1 = sequence;
+	
+
+	auto callFunc = CallFunc::create(CC_CALLBACK_0(Enemy::AnimationCallback, this));
+
+	auto leftflamesequence = Sequence::create(leftsmallflameanimate, callFunc, nullptr);
+	leftsmallflame->runAction(leftflamesequence);
+	
+
+
+
+	
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;
@@ -155,6 +190,13 @@ bool Enemy::init()
 
 	this->scheduleUpdate();
 	return true;
+}
+
+void Enemy::AnimationCallback()
+{
+	leftsmallflame->setVisible(false);
+	leftflame->runAction(leftflameanimate1);
+	
 }
 
 void Enemy::update(float f)

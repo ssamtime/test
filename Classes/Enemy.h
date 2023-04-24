@@ -22,6 +22,10 @@ public:
 	bool isCollided3;
 	
 
+	cocos2d::Animate* leftflameanimate1;
+	cocos2d::Animate* leftsmallflameanimate;
+	cocos2d::Animate* leftflameanimate2;
+
 	cocos2d::Animation* animation2;
 	cocos2d::ActionInterval* animate2;
 
@@ -33,6 +37,9 @@ public:
 	cocos2d::Action* pMoveBy3;
 
 	cocos2d::Sprite* enemybullet1;
+	cocos2d::Sprite* leftflame;
+	cocos2d::Sprite* rightflame;
+	cocos2d::Sprite* leftsmallflame;
 
 	void update(float f);
 
@@ -40,7 +47,9 @@ public:
 	void arabianrunning1(cocos2d::Sprite* obj);
 	void arabianrunning2(cocos2d::Sprite* obj);
 	void arabianrunning3(cocos2d::Sprite* obj);
+	
 
+	void AnimationCallback();
 	
 };
 
