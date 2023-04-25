@@ -4,7 +4,8 @@ USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
 
-//보스만들기
+//보스움직이기랑 불맞으면 죽는거
+// rightflame을 1이랑2로 나뉘어서 확실한 불기둥에 맞으면 죽는걸로할까,,
 //목숨 총알 폭탄만들기
 
 Enemy::Enemy()
@@ -44,7 +45,7 @@ bool Enemy::init()
 	boss = Sprite::create("boss1.png");
 	boss->setScale(3);
 	boss->setAnchorPoint(Vec2(0, 0));
-	boss->setPosition(Vec2(300, 250));
+	boss->setPosition(Vec2(200, 250));
 	boss->setZOrder(5);
 	this->addChild(boss);
 
@@ -103,7 +104,7 @@ bool Enemy::init()
 	/*auto leftsmallflameRep = RepeatForever::create(leftsmallflameanimate);
 	leftsmallflame->runAction(leftsmallflameRep);*/
 
-	auto rightsmallflame = Sprite::create("hollow.png");
+	rightsmallflame = Sprite::create("hollow.png");
 	rightsmallflame->setFlippedX(true);
 	rightsmallflame->setAnchorPoint(Vec2(0, 0));
 	rightsmallflame->setPosition(Vec2(boss->getPositionX() + 623, boss->getPositionY() - 13));
@@ -117,8 +118,8 @@ bool Enemy::init()
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame2.png");
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
-	auto rightsmallflameanimate = Animate::create(rightsmallflameanimation);
-	auto rightsmallflameRep = RepeatForever::create(rightsmallflameanimate);
+	rightsmallflameanimate = Animate::create(rightsmallflameanimation);
+	/*auto rightsmallflameRep = RepeatForever::create(rightsmallflameanimate);*/
 	/*rightsmallflame->runAction(rightsmallflameRep);*/
 
 	
@@ -131,7 +132,7 @@ bool Enemy::init()
 
 	rightflame = Sprite::create("hollow.png");
 	rightflame->setAnchorPoint(Vec2(0, 0));
-	rightflame->setPosition(Vec2(boss->getPositionX() + 620, boss->getPositionY() - 352));
+	rightflame->setPosition(Vec2(boss->getPositionX() + 590, boss->getPositionY() - 352));
 	rightflame->setScale(3);
 	rightflame->setZOrder(6);
 	this->addChild(rightflame);
@@ -147,7 +148,9 @@ bool Enemy::init()
 	}
 	
 	leftflameanimate1 = Animate::create(animation1);
+	rightflameanimate1 = Animate::create(animation1);
 	leftflameanimate1->retain();
+	rightflameanimate1->retain();
 
 	auto enginefiresprite2 = Sprite::create("flamerow2.png");
 	auto enginefiretexture2 = enginefiresprite2->getTexture();
@@ -160,15 +163,77 @@ bool Enemy::init()
 	}
 
 	leftflameanimate2 = Animate::create(animation2);
+	rightflameanimate2 = Animate::create(animation2);
 	leftflameanimate2->retain();
-	rightflame->runAction(leftflameanimate2);
+	rightflameanimate2->retain();
+	/*rightflame->runAction(leftflameanimate2);*/
 
-	//// 두 애니메이션을 연속해서 실행하는 애니메이션 생성
-	//auto sequence = Sequence::create(Animate::create(animation1), Animate::create(animation2), nullptr);
+	auto enginefiresprite3 = Sprite::create("flamerow3.png");
+	auto enginefiretexture3 = enginefiresprite3->getTexture();
+	auto animation3 = Animation::create();
+	animation3->setDelayPerUnit(0.2);
 
-	//// leftflameanimate1 변수에 애니메이션 저장
-	//leftflameanimate1 = sequence;
+	for (int i = 0; i < 4; i++)
+	{
+		animation3->addSpriteFrameWithTexture(enginefiretexture3, Rect(i * 50, 0, 50, 160));
+	}
+
+	leftflameanimate3 = Animate::create(animation3);
+	rightflameanimate3 = Animate::create(animation3);
+	leftflameanimate3->retain();
+	rightflameanimate3->retain();
+
+	auto enginefiresprite4 = Sprite::create("flamerow4.png");
+	auto enginefiretexture4 = enginefiresprite4->getTexture();
+	auto animation4 = Animation::create();
+	animation4->setDelayPerUnit(0.2);
+
+	for (int i = 0; i < 6; i++)
+	{
+		animation4->addSpriteFrameWithTexture(enginefiretexture4, Rect(i * 50, 0, 50, 160));
+	}
+
+	leftflameanimate4 = Animate::create(animation4);
+	rightflameanimate4 = Animate::create(animation4);
+	leftflameanimate4->retain();
+	rightflameanimate4->retain();
+
+	auto enginefiresprite5 = Sprite::create("flamerow5.png");
+	auto enginefiretexture5 = enginefiresprite5->getTexture();
+	auto animation5 = Animation::create();
+	animation5->setDelayPerUnit(0.15);
+
+	for (int i = 0; i < 3; i++)
+	{
+		animation5->addSpriteFrameWithTexture(enginefiretexture5, Rect(i * 51, 0, 51, 160));
+	}
+	for (int i = 0; i < 6; i++)
+	{
+		animation5->addSpriteFrameWithTexture(enginefiretexture5, Rect(155+i*68, 0, 68, 160));
+	}
+
+	leftflameanimate5 = Animate::create(animation5);
+	rightflameanimate5 = Animate::create(animation5);
+	leftflameanimate5->retain();
+	rightflameanimate5->retain();
 	
+
+	auto enginefiresprite6 = Sprite::create("flamerow6.png");
+	auto enginefiretexture6 = enginefiresprite6->getTexture();
+	auto animation6 = Animation::create();
+	animation6->setDelayPerUnit(0.12);
+
+	for (int i = 0; i < 7; i++)
+	{
+		animation6->addSpriteFrameWithTexture(enginefiretexture6, Rect(i * 65, 0, 65, 160));
+	}
+
+	leftflameanimate6 = Animate::create(animation6);
+	rightflameanimate6 = Animate::create(animation6);
+	leftflameanimate6->retain();
+	rightflameanimate6->retain();
+	
+
 
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Enemy::AnimationCallback, this));
 
@@ -176,9 +241,8 @@ bool Enemy::init()
 	leftsmallflame->runAction(leftflamesequence);
 	
 
-
-
-	
+	auto rightflamesequence = Sequence::create(rightsmallflameanimate, callFunc, nullptr);
+	rightsmallflame->runAction(rightflamesequence);
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;
@@ -195,9 +259,18 @@ bool Enemy::init()
 void Enemy::AnimationCallback()
 {
 	leftsmallflame->setVisible(false);
-	leftflame->runAction(leftflameanimate1);
+	rightsmallflame->setVisible(false);
+	auto hideAction = Hide::create();
+	auto leftflameanimatesequnce = Sequence::create(leftflameanimate1, leftflameanimate2, leftflameanimate3, leftflameanimate4, leftflameanimate5, leftflameanimate6, hideAction, nullptr);
+	auto rightflameanimatesequnce = Sequence::create(rightflameanimate1, rightflameanimate2, rightflameanimate3, rightflameanimate4, rightflameanimate5, rightflameanimate6, hideAction,nullptr);
+
+	leftflame->runAction(leftflameanimatesequnce);
+	rightflame->setFlippedX(true);
+	rightflame->runAction(rightflameanimatesequnce);
 	
 }
+
+
 
 void Enemy::update(float f)
 {
