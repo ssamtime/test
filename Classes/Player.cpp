@@ -9,6 +9,10 @@ cocos2d::Sprite* arabian3;
 cocos2d::Sprite* boss;
 cocos2d::Sprite* leftengine;
 cocos2d::Sprite* rightengine;
+cocos2d::Sprite* leftflame;
+cocos2d::Sprite* rightflame;
+
+
 bool arabian1Alive;
 bool arabian2Alive;
 bool arabian3Alive;
@@ -162,7 +166,12 @@ void Player::update(float f)
 			machinegunCapsule->setPositionX(machinegunCapsule->getPositionX() - 10);
 
 			boss->setPositionX(boss->getPositionX() - 10);
+			leftengine->setPositionX(leftengine->getPositionX() - 10);
+			rightengine->setPositionX(rightengine->getPositionX() - 10);
+			leftflame->setPositionX(leftflame->getPositionX() - 10);
+			rightflame->setPositionX(rightflame->getPositionX() - 10);
 			
+
 			if (!arabian1Alive)
 			{
 				arabian1->setPositionX(arabian1->getPositionX() - 10);
@@ -212,6 +221,20 @@ void Player::update(float f)
 		isMachinegun = true;
 		machinegunCapsule->setVisible(false);
 	}
+
+	if (leftflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedleftflame  && playerAlive)
+	{
+		playerDeath();
+		playerAlive = false;
+		isCollidedleftflame = false;
+	}
+
+	if (rightflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedrightflame && playerAlive)
+	{
+		playerDeath();
+		playerAlive = false;
+		isCollidedrightflame = false;
+	}
 }
 
 void Player::jump()
@@ -259,9 +282,8 @@ void Player::playerDeath()
 		player->runAction(pmoveto);
 	}
 	_right = false;
+	_left = false;
 	
-	this->getEventDispatcher()->setEnabled(false);
-
 	auto deathanimation = Animation::create();
 	deathanimation->setDelayPerUnit(0.12);
 
@@ -291,6 +313,6 @@ void Player::playerDeath()
 
 	auto deathanimate = Animate::create(deathanimation);
 	player->runAction(deathanimate);
-	
-	
+
+	this->getEventDispatcher()->setEnabled(false);
 }

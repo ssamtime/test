@@ -33,6 +33,8 @@ public:
     bool isCollided1;
     bool isCollided2;
     bool isCollided3;
+    bool isCollidedleftflame;
+    bool isCollidedrightflame;
 
     bool playerAlive;
     void update(float f)override;

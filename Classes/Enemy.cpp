@@ -4,8 +4,8 @@ USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
 
-//보스움직이기랑 불맞으면 죽는거
-// rightflame을 1이랑2로 나뉘어서 확실한 불기둥에 맞으면 죽는걸로할까,,
+//보스움직일때 보스이미지 달라져서,,엔진위치도 이상하게보이고,, 다시 이미지 따오거나 붙여넣어서 수정하거나해야할듯
+//보스 체력에따라 부숴지는거
 //목숨 총알 폭탄만들기
 
 Enemy::Enemy()
@@ -48,6 +48,17 @@ bool Enemy::init()
 	boss->setPosition(Vec2(200, 250));
 	boss->setZOrder(5);
 	this->addChild(boss);
+	bosshp = 100;
+	auto movebossright = MoveBy::create(3, Vec2(300, 0));
+	auto movebossleft = MoveBy::create(3, Vec2(-300, 0));
+	auto movebossseq = Sequence::create(movebossright, movebossleft, nullptr);
+	auto bossmoverepforever = RepeatForever::create(movebossseq);
+	boss->runAction(bossmoverepforever);
+	auto movebossup = MoveBy::create(2, Vec2(0, 20));
+	auto movebossdown = MoveBy::create(2, Vec2(0, -20));
+	auto movebossseq2 = Sequence::create(movebossup, movebossdown, nullptr);
+	auto bossmoverepforever2 = RepeatForever::create(movebossseq2);
+	boss->runAction(bossmoverepforever2);
 
 	leftengine = Sprite::create("leftNormal.png");
 	leftengine->setAnchorPoint(Vec2(0, 0));
@@ -119,9 +130,6 @@ bool Enemy::init()
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
 	rightsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
 	rightsmallflameanimate = Animate::create(rightsmallflameanimation);
-	/*auto rightsmallflameRep = RepeatForever::create(rightsmallflameanimate);*/
-	/*rightsmallflame->runAction(rightsmallflameRep);*/
-
 	
 	leftflame = Sprite::create("hollow.png");
 	leftflame->setAnchorPoint(Vec2(0, 0));
@@ -209,7 +217,7 @@ bool Enemy::init()
 	}
 	for (int i = 0; i < 6; i++)
 	{
-		animation5->addSpriteFrameWithTexture(enginefiretexture5, Rect(155+i*68, 0, 68, 160));
+		animation5->addSpriteFrameWithTexture(enginefiretexture5, Rect(155+i*66, 0,66, 160));
 	}
 
 	leftflameanimate5 = Animate::create(animation5);
@@ -237,11 +245,11 @@ bool Enemy::init()
 
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Enemy::AnimationCallback, this));
 
-	auto leftflamesequence = Sequence::create(leftsmallflameanimate, callFunc, nullptr);
+	auto leftflamesequence = Sequence::create(leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, callFunc, nullptr);
 	leftsmallflame->runAction(leftflamesequence);
 	
 
-	auto rightflamesequence = Sequence::create(rightsmallflameanimate, callFunc, nullptr);
+	auto rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
 	rightsmallflame->runAction(rightflamesequence);
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
@@ -261,16 +269,19 @@ void Enemy::AnimationCallback()
 	leftsmallflame->setVisible(false);
 	rightsmallflame->setVisible(false);
 	auto hideAction = Hide::create();
-	auto leftflameanimatesequnce = Sequence::create(leftflameanimate1, leftflameanimate2, leftflameanimate3, leftflameanimate4, leftflameanimate5, leftflameanimate6, hideAction, nullptr);
-	auto rightflameanimatesequnce = Sequence::create(rightflameanimate1, rightflameanimate2, rightflameanimate3, rightflameanimate4, rightflameanimate5, rightflameanimate6, hideAction,nullptr);
+	auto movebyrightflame = MoveBy::create(0.5, Vec2(rightflame->getPositionX() - 20, rightflame->getPositionY()));
+	auto reversemovebyrightflame = MoveBy::create(0.1, Vec2(rightflame->getPositionX() + 20, rightflame->getPositionY()));
+	auto leftflameanimatesequnce = Sequence::create(leftflameanimate1, leftflameanimate2, leftflameanimate3, leftflameanimate4, leftflameanimate5, nullptr);
+	auto rightflameanimatesequnce = Sequence::create(rightflameanimate1, rightflameanimate2, rightflameanimate3, rightflameanimate4, rightflameanimate5, nullptr);
 
-	leftflame->runAction(leftflameanimatesequnce);
+	auto leftflamerep = RepeatForever::create(leftflameanimatesequnce);
+	auto rightflamerep = RepeatForever::create(rightflameanimatesequnce);
+	leftflame->runAction(leftflamerep);
 	rightflame->setFlippedX(true);
-	rightflame->runAction(rightflameanimatesequnce);
+	rightflame->runAction(rightflamerep);
 	
+	CCLOG("AnimationCallback");
 }
-
-
 
 void Enemy::update(float f)
 {
@@ -295,7 +306,51 @@ void Enemy::update(float f)
 		isCollided3 = false;
 		arabian3Alive = false;
 	}
-	
+	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) )
+	{
+		bosshp -= 1;
+		playerbullet1->setPosition(Vec2(0, 2000));
+		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
+		auto moveleft = movebyright->reverse();
+		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
+		auto shakelittle = Repeat::create(shakeseq, 3);
+
+		auto movebyright2 = MoveBy::create(0.5, Vec2(200, 0));
+		auto moveleft2 = MoveBy::create(0.5, Vec2(-200, 0));
+		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
+		auto shakebig = Repeat::create(shakeseq, 5);
+		/*auto skakeseq3 = Sequence::create(shakebig,DelayTime::create(1.0f), RemoveSelf::create(), nullptr);*/
+		auto skakeseq3 = Sequence::create(shakebig, DelayTime::create(1.0f), CallFunc::create(CC_CALLBACK_0(Node::removeFromParent, this)), nullptr);
+		if (bosshp == 90)
+		{
+			boss->setTexture("boss22.png");
+			boss->runAction(shakelittle);
+		}
+		if (bosshp == 80)
+		{
+			boss->setTexture("boss33.png");
+			boss->runAction(shakelittle);
+		}
+		if (bosshp == 70)
+		{
+			boss->setTexture("boss44.png");
+			boss->runAction(shakelittle);
+		}
+		if (bosshp == 95)
+		{
+			boss->setTexture("bossdeath.png");
+			boss->runAction(skakeseq3);
+		}
+		
+		
+		CCLOG("%d", bosshp);
+	}
+	rightengine->setPosition(Vec2(boss->getPositionX() + 600, boss->getPositionY() + 150));
+	leftengine->setPosition(Vec2(boss->getPositionX() + 23, boss->getPositionY() + 151));
+	rightflame->setPosition(Vec2(boss->getPositionX() + 590, boss->getPositionY() - 352));
+	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
+	leftsmallflame->setPosition(Vec2(boss->getPositionX() + 97, boss->getPositionY() - 13));
+	rightsmallflame->setPosition(Vec2(boss->getPositionX() + 623, boss->getPositionY() - 13));
 }
 
 void Enemy::arabiandeath(cocos2d::Sprite* obj,int n1,int n2)
@@ -404,4 +459,6 @@ void Enemy::arabianrunning3(cocos2d::Sprite* obj)
 	rep3->setTag(31);
 	pMoveBy3->setTag(32);
 }
+
+
 

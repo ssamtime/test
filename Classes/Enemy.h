@@ -21,6 +21,7 @@ public:
 	bool isCollided2;
 	bool isCollided3;
 	
+	int bosshp;
 
 	cocos2d::Animate* leftflameanimate1;
 	cocos2d::Animate* leftsmallflameanimate;
@@ -50,10 +51,9 @@ public:
 
 
 	cocos2d::Sprite* enemybullet1;
-	cocos2d::Sprite* leftflame;
-	cocos2d::Sprite* rightflame;
 	cocos2d::Sprite* leftsmallflame;
 	cocos2d::Sprite* rightsmallflame;
+
 
 	void update(float f);
 
@@ -73,7 +73,10 @@ extern cocos2d::Sprite* arabian3;
 extern cocos2d::Sprite* boss;
 extern cocos2d::Sprite* leftengine;
 extern cocos2d::Sprite* rightengine;
+extern cocos2d::Sprite* leftflame;
+extern cocos2d::Sprite* rightflame;
 
 extern bool arabian1Alive;
 extern bool arabian2Alive;
 extern bool arabian3Alive;
+
