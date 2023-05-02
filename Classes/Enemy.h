@@ -20,7 +20,8 @@ public:
 	bool isCollided1;
 	bool isCollided2;
 	bool isCollided3;
-	
+	bool bossidle;
+
 	int bosshp;
 
 	cocos2d::Animate* leftflameanimate1;
@@ -49,6 +50,12 @@ public:
 	cocos2d::Action* rep3;
 	cocos2d::Action* pMoveBy3;
 
+	cocos2d::Action* leftflamesequence;
+	cocos2d::Action* rightflamesequence;
+	cocos2d::Action* rightengineRep;
+	cocos2d::Action* leftengineRep;
+	cocos2d::Action* bossmoverepforever;
+	cocos2d::Action* bossmoverepforever2;
 
 	cocos2d::Sprite* enemybullet1;
 	cocos2d::Sprite* leftsmallflame;

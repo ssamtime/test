@@ -4,9 +4,9 @@ USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
 
-//보스움직일때 보스이미지 달라져서,,엔진위치도 이상하게보이고,, 다시 이미지 따오거나 붙여넣어서 수정하거나해야할듯
-//보스 체력에따라 부숴지는거
 //목숨 총알 폭탄만들기
+//보스 못잡으면 화면 못넘어가게
+//보스 죽으면 약간 밑으로 이동
 
 Enemy::Enemy()
 {
@@ -45,20 +45,21 @@ bool Enemy::init()
 	boss = Sprite::create("boss1.png");
 	boss->setScale(3);
 	boss->setAnchorPoint(Vec2(0, 0));
-	boss->setPosition(Vec2(200, 250));
+	boss->setPosition(Vec2(1000, 250));
 	boss->setZOrder(5);
 	this->addChild(boss);
 	bosshp = 100;
+	bossidle = false;
 	auto movebossright = MoveBy::create(3, Vec2(300, 0));
 	auto movebossleft = MoveBy::create(3, Vec2(-300, 0));
 	auto movebossseq = Sequence::create(movebossright, movebossleft, nullptr);
-	auto bossmoverepforever = RepeatForever::create(movebossseq);
-	boss->runAction(bossmoverepforever);
+	bossmoverepforever = RepeatForever::create(movebossseq);
+	bossmoverepforever->retain();
 	auto movebossup = MoveBy::create(2, Vec2(0, 20));
 	auto movebossdown = MoveBy::create(2, Vec2(0, -20));
 	auto movebossseq2 = Sequence::create(movebossup, movebossdown, nullptr);
-	auto bossmoverepforever2 = RepeatForever::create(movebossseq2);
-	boss->runAction(bossmoverepforever2);
+	bossmoverepforever2 = RepeatForever::create(movebossseq2);
+	bossmoverepforever2->retain();
 
 	leftengine = Sprite::create("leftNormal.png");
 	leftengine->setAnchorPoint(Vec2(0, 0));
@@ -76,8 +77,9 @@ bool Enemy::init()
 	leftengineanimation->addSpriteFrameWithFile("leftNormal.png");
 	leftengineanimation->addSpriteFrameWithFile("leftBlue.png");
 	auto leftengineanimate = Animate::create(leftengineanimation);
-	auto leftengineRep = RepeatForever::create(leftengineanimate);
-	leftengine->runAction(leftengineRep);
+	leftengineRep = RepeatForever::create(leftengineanimate);
+	leftengineRep->retain();
+
 
 	rightengine = Sprite::create("rightNormal.png");
 	rightengine->setAnchorPoint(Vec2(0, 0));
@@ -95,8 +97,8 @@ bool Enemy::init()
 	rightengineanimation->addSpriteFrameWithFile("rightNormal.png");
 	rightengineanimation->addSpriteFrameWithFile("rightBlue.png");
 	auto rightengineanimate = Animate::create(rightengineanimation);
-	auto rightengineRep = RepeatForever::create(rightengineanimate);
-	rightengine->runAction(rightengineRep);
+	rightengineRep = RepeatForever::create(rightengineanimate);
+	rightengineRep->retain();
 
 	leftsmallflame = Sprite::create("hollow.png");
 	leftsmallflame->setAnchorPoint(Vec2(0, 0));
@@ -112,8 +114,6 @@ bool Enemy::init()
 	leftsmallflameanimation->addSpriteFrameWithFile("smallflame3.png");
 	leftsmallflameanimation->addSpriteFrameWithFile("smallflame4.png");
 	leftsmallflameanimate = Animate::create(leftsmallflameanimation);
-	/*auto leftsmallflameRep = RepeatForever::create(leftsmallflameanimate);
-	leftsmallflame->runAction(leftsmallflameRep);*/
 
 	rightsmallflame = Sprite::create("hollow.png");
 	rightsmallflame->setFlippedX(true);
@@ -245,12 +245,13 @@ bool Enemy::init()
 
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Enemy::AnimationCallback, this));
 
-	auto leftflamesequence = Sequence::create(leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, callFunc, nullptr);
-	leftsmallflame->runAction(leftflamesequence);
-	
+	leftflamesequence = Sequence::create(leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, callFunc, nullptr);
+	leftflamesequence->retain();
+	rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
+	rightflamesequence->retain();
 
-	auto rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
-	rightsmallflame->runAction(rightflamesequence);
+	int a=player->getPositionX(), b=boss->getPositionX();
+	
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;
@@ -315,12 +316,24 @@ void Enemy::update(float f)
 		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
 		auto shakelittle = Repeat::create(shakeseq, 3);
 
-		auto movebyright2 = MoveBy::create(0.5, Vec2(200, 0));
-		auto moveleft2 = MoveBy::create(0.5, Vec2(-200, 0));
+		auto movebyright2 = MoveBy::create(0.5, Vec2(100, 0));
+		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, 0));
 		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
-		auto shakebig = Repeat::create(shakeseq, 5);
-		/*auto skakeseq3 = Sequence::create(shakebig,DelayTime::create(1.0f), RemoveSelf::create(), nullptr);*/
-		auto skakeseq3 = Sequence::create(shakebig, DelayTime::create(1.0f), CallFunc::create(CC_CALLBACK_0(Node::removeFromParent, this)), nullptr);
+		auto shakebig = Repeat::create(shakeseq2, 5);
+		auto hideaction = Hide::create();
+		auto shakeseq3 = Sequence::create(shakebig, DelayTime::create(1.0f),hideaction , nullptr);
+
+		auto turnred = TintTo::create(0.1f, Color3B::RED);
+		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);
+		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
+		boss->runAction(colorsequnce);
+
+		auto movetofar1 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar2 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar3 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar4 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar5 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar6 = MoveTo::create(0.1, Vec2(0, 3000));
 		if (bosshp == 90)
 		{
 			boss->setTexture("boss22.png");
@@ -336,21 +349,48 @@ void Enemy::update(float f)
 			boss->setTexture("boss44.png");
 			boss->runAction(shakelittle);
 		}
-		if (bosshp == 95)
+		if (bosshp ==0)
 		{
 			boss->setTexture("bossdeath.png");
-			boss->runAction(skakeseq3);
+			boss->runAction(shakeseq3);
+			leftsmallflame->runAction(movetofar1);
+			rightsmallflame->runAction(movetofar2);
+			leftflame->runAction(movetofar3);
+			rightflame->runAction(movetofar4);
+			rightengine->runAction(movetofar5);
+			leftengine->runAction(movetofar6);
 		}
-		
 		
 		CCLOG("%d", bosshp);
 	}
-	rightengine->setPosition(Vec2(boss->getPositionX() + 600, boss->getPositionY() + 150));
-	leftengine->setPosition(Vec2(boss->getPositionX() + 23, boss->getPositionY() + 151));
-	rightflame->setPosition(Vec2(boss->getPositionX() + 590, boss->getPositionY() - 352));
-	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
-	leftsmallflame->setPosition(Vec2(boss->getPositionX() + 97, boss->getPositionY() - 13));
-	rightsmallflame->setPosition(Vec2(boss->getPositionX() + 623, boss->getPositionY() - 13));
+
+	if (player->getPositionX() == boss->getPositionX()&&!bossidle)
+	{
+		leftsmallflame->stopAllActions();
+		rightsmallflame->stopAllActions();
+		rightengine->stopAllActions();
+		leftengine->stopAllActions();
+		boss->stopAllActions();
+		boss->stopAllActions();
+
+		leftsmallflame->runAction(leftflamesequence);
+		rightsmallflame->runAction(rightflamesequence);
+		rightengine->runAction(rightengineRep);
+		leftengine->runAction(leftengineRep);
+		boss->runAction(bossmoverepforever);
+		boss->runAction(bossmoverepforever2);
+	}
+
+	if (bosshp>0)
+	{
+		rightengine->setPosition(Vec2(boss->getPositionX() + 600, boss->getPositionY() + 150));
+		leftengine->setPosition(Vec2(boss->getPositionX() + 23, boss->getPositionY() + 151));
+		rightflame->setPosition(Vec2(boss->getPositionX() + 590, boss->getPositionY() - 352));
+		leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
+		leftsmallflame->setPosition(Vec2(boss->getPositionX() + 97, boss->getPositionY() - 13));
+		rightsmallflame->setPosition(Vec2(boss->getPositionX() + 623, boss->getPositionY() - 13));
+	}
+	
 }
 
 void Enemy::arabiandeath(cocos2d::Sprite* obj,int n1,int n2)
