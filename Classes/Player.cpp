@@ -12,6 +12,7 @@ cocos2d::Sprite* rightengine;
 cocos2d::Sprite* leftflame;
 cocos2d::Sprite* rightflame;
 
+int bosshp;
 
 bool arabian1Alive;
 bool arabian2Alive;
@@ -30,7 +31,6 @@ Player::~Player()
 
 bool Player::init()
 {
-	
 
     player = Sprite::create("Fio.png");
     player->setScale(3);
@@ -184,6 +184,11 @@ void Player::update(float f)
 			{
 				arabian3->setPositionX(arabian3->getPositionX() - 10);
 			}
+
+			/*if (player->getPositionX() > boss->getPositionX() && bosshp)
+			{
+				background1->setPositionX(background1->getPositionX() + 10);
+			}*/
 		}
 		
 		else

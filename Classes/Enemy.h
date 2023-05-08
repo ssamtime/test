@@ -20,9 +20,8 @@ public:
 	bool isCollided1;
 	bool isCollided2;
 	bool isCollided3;
-	bool bossidle;
 
-	int bosshp;
+	bool bossidle;
 
 	cocos2d::Animate* leftflameanimate1;
 	cocos2d::Animate* leftsmallflameanimate;
@@ -86,4 +85,4 @@ extern cocos2d::Sprite* rightflame;
 extern bool arabian1Alive;
 extern bool arabian2Alive;
 extern bool arabian3Alive;
-
+extern int bosshp;

@@ -3,10 +3,8 @@
 USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
-
+cocos2d::Sprite* bomb;
 //목숨 총알 폭탄만들기
-//보스 못잡으면 화면 못넘어가게
-//보스 죽으면 약간 밑으로 이동
 
 Enemy::Enemy()
 {
@@ -45,11 +43,11 @@ bool Enemy::init()
 	boss = Sprite::create("boss1.png");
 	boss->setScale(3);
 	boss->setAnchorPoint(Vec2(0, 0));
-	boss->setPosition(Vec2(1000, 250));
+	boss->setPosition(Vec2(1000, 300));
 	boss->setZOrder(5);
 	this->addChild(boss);
 	bosshp = 100;
-	bossidle = false;
+	bossidle = true;
 	auto movebossright = MoveBy::create(3, Vec2(300, 0));
 	auto movebossleft = MoveBy::create(3, Vec2(-300, 0));
 	auto movebossseq = Sequence::create(movebossright, movebossleft, nullptr);
@@ -293,10 +291,24 @@ void Enemy::update(float f)
 		isCollided1 = false;
 		arabian1Alive = false;
 	}
+	if (arabian1->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided1)
+	{
+		arabiandeath(arabian1, 11, 12);
+		bomb->setPosition(Vec2(0, 2000));
+		isCollided1 = false;
+		arabian1Alive = false;
+	}
 	if (arabian2->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided2 )
 	{
 		arabiandeath(arabian2, 21, 22);
 		playerbullet1->setPosition(Vec2(0, 2000));
+		isCollided2 = false;
+		arabian2Alive = false;
+	}
+	if (arabian2->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided2)
+	{
+		arabiandeath(arabian2, 21, 22);
+		bomb->setPosition(Vec2(0, 2000));
 		isCollided2 = false;
 		arabian2Alive = false;
 	}
@@ -307,21 +319,28 @@ void Enemy::update(float f)
 		isCollided3 = false;
 		arabian3Alive = false;
 	}
+	if (arabian3->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided3)
+	{
+		arabiandeath(arabian3, 31, 32);
+		bomb->setPosition(Vec2(0, 2000));
+		isCollided3 = false;
+		arabian3Alive = false;
+	}
 	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) )
 	{
 		bosshp -= 1;
 		playerbullet1->setPosition(Vec2(0, 2000));
 		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
-		auto moveleft = movebyright->reverse();
+		auto moveleft = MoveBy::create(0.1, Vec2(-10, 0));
 		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
 		auto shakelittle = Repeat::create(shakeseq, 3);
 
-		auto movebyright2 = MoveBy::create(0.5, Vec2(100, 0));
-		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, 0));
+		auto movebyright2 = MoveBy::create(0.5, Vec2(100, -20));
+		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, -20));
 		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
 		auto shakebig = Repeat::create(shakeseq2, 5);
 		auto hideaction = Hide::create();
-		auto shakeseq3 = Sequence::create(shakebig, DelayTime::create(1.0f),hideaction , nullptr);
+		auto shakeseq3 = Sequence::create(shakebig, hideaction , nullptr);
 
 		auto turnred = TintTo::create(0.1f, Color3B::RED);
 		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);
@@ -334,7 +353,7 @@ void Enemy::update(float f)
 		auto movetofar4 = MoveTo::create(0.1, Vec2(0, 3000));
 		auto movetofar5 = MoveTo::create(0.1, Vec2(0, 3000));
 		auto movetofar6 = MoveTo::create(0.1, Vec2(0, 3000));
-		if (bosshp == 90)
+		if (bosshp == 80)
 		{
 			boss->setTexture("boss22.png");
 			boss->runAction(shakelittle);
@@ -363,8 +382,64 @@ void Enemy::update(float f)
 		
 		CCLOG("%d", bosshp);
 	}
+	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()))
+	{
+		bosshp -= 10;
+		bomb->setPosition(Vec2(0, 2000));
+		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
+		auto moveleft = MoveBy::create(0.1, Vec2(-10, 0));
+		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
+		auto shakelittle = Repeat::create(shakeseq, 3);
 
-	if (player->getPositionX() == boss->getPositionX()&&!bossidle)
+		auto movebyright2 = MoveBy::create(0.5, Vec2(100, -20));
+		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, -20));
+		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
+		auto shakebig = Repeat::create(shakeseq2, 5);
+		auto hideaction = Hide::create();
+		auto shakeseq3 = Sequence::create(shakebig, hideaction, nullptr);
+
+		auto turnred = TintTo::create(0.1f, Color3B::RED);
+		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);
+		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
+		boss->runAction(colorsequnce);
+
+		auto movetofar1 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar2 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar3 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar4 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar5 = MoveTo::create(0.1, Vec2(0, 3000));
+		auto movetofar6 = MoveTo::create(0.1, Vec2(0, 3000));
+		if (bosshp > 80&& bosshp <= 90)
+		{
+			boss->setTexture("boss22.png");
+			boss->runAction(shakelittle);
+		}
+		if (bosshp >70 && bosshp <= 80 )
+		{
+			boss->setTexture("boss33.png");
+			boss->runAction(shakelittle);
+		}
+		if (bosshp > 60 && bosshp <= 70 )
+		{
+			boss->setTexture("boss44.png");
+			boss->runAction(shakelittle);
+		}
+		if ( bosshp <= 50 )
+		{
+			boss->setTexture("bossdeath.png");
+			boss->runAction(shakeseq3);
+			leftsmallflame->runAction(movetofar1);
+			rightsmallflame->runAction(movetofar2);
+			leftflame->runAction(movetofar3);
+			rightflame->runAction(movetofar4);
+			rightengine->runAction(movetofar5);
+			leftengine->runAction(movetofar6);
+		}
+
+		CCLOG("%d", bosshp);
+	}
+
+	if (player->getPositionX() == boss->getPositionX()&&bossidle)
 	{
 		leftsmallflame->stopAllActions();
 		rightsmallflame->stopAllActions();
@@ -379,6 +454,8 @@ void Enemy::update(float f)
 		leftengine->runAction(leftengineRep);
 		boss->runAction(bossmoverepforever);
 		boss->runAction(bossmoverepforever2);
+
+		bossidle = false;
 	}
 
 	if (bosshp>0)

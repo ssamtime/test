@@ -21,7 +21,6 @@ public:
     //키보드 콜백함수
     void onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
     void onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event);
-
     
     cocos2d::EventListenerKeyboard* _listener;
 
@@ -30,19 +29,22 @@ public:
 
     int sign;
 
-    
-
     void update(float f)override;
-    
     void makeBullet();
-    
     void makeMachinegun();
+    void makebomb();
    
+    cocos2d::Animate* bombanimate;
  
+   /* cocos2d::Sprite* bomb;*/
+
+    cocos2d::ccBezierConfig bezier;
+
 private:
 
 };
 
 extern cocos2d::Sprite* playerbullet1;
 extern cocos2d::Sprite* machinegunCapsule;
+extern cocos2d::Sprite* bomb;
 extern bool isMachinegun;

@@ -1,7 +1,9 @@
 
 #include "Player.h"
-
+#include <extensions/cocos-ext.h>
+#include <cocos-ext.h>
 USING_NS_CC;
+USING_NS_CC_EXT;
 
 cocos2d::Sprite* player;
 bool _left;
@@ -29,7 +31,7 @@ bool Weapon::init()
 
 	playerbullet1 = Sprite::create("bullet.png");
 	playerbullet1->setAnchorPoint(Vec2(0, 0));
-	playerbullet1->setPosition(player->getPositionX()  , player->getPositionY() + -1000);
+	playerbullet1->setPosition(player->getPositionX()  , player->getPositionY() -1000);
 	playerbullet1->setZOrder(5);
 	this->addChild(playerbullet1);
 
@@ -41,6 +43,14 @@ bool Weapon::init()
 	this->addChild(machinegunCapsule);
 
 	isMachinegun = false;
+
+	bomb = Sprite::create("bombhollow.png");
+	bomb->setAnchorPoint(Vec2(0, 0));
+	bomb->setPosition(player->getPositionX(), player->getPositionY() -1000);
+	bomb->setZOrder(5);
+	this->addChild(bomb);
+
+	
 
 	this->scheduleUpdate();
 	return true;
@@ -83,6 +93,7 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		_pressA = true;
 		break;
 	case EventKeyboard::KeyCode::KEY_D:
+		makebomb();
 		_pressD = true;
 		break;
 	}
@@ -102,23 +113,19 @@ void Weapon::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 	}
 }
 
-
-
 void Weapon::makeBullet()
 {
 	playerbullet1 = Sprite::create("bullet.png");
 	playerbullet1->setAnchorPoint(Vec2(0, 0));
-	
+	playerbullet1->setZOrder(5);
+
 	if (!RIGHT)
 		sign = -1;
 	else if (RIGHT)
 		sign = +1;
 	playerbullet1->setPosition(player->getPositionX()+50 + sign*55, player->getPositionY() + 55);
-	
-	playerbullet1->setZOrder(5);
 
 	auto movebullet = MoveBy::create(0.8, Vec2(sign * 1000 * (!_up), 1000 * _up));
-
 	playerbullet1->runAction(movebullet);
 
 	this->addChild(playerbullet1);
@@ -146,21 +153,57 @@ void Weapon::makeMachinegun()
 		playerbullet1->setPosition(player->getPositionX() + 85 + sign * 55, player->getPositionY() + 60);
 		playerbullet1->setZOrder(5);
 		playerbullet1->setRotation(-upPressedTime);
-		
 	}
 
-
 	auto moveMachinegunbullet = MoveBy::create(0.8, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
-
 	playerbullet1->runAction(moveMachinegunbullet);
-
 	this->addChild(playerbullet1);
 }
 
+void Weapon::makebomb()
+{
+	if (!RIGHT)
+		sign = -1;
+	else if (RIGHT)
+		sign = +1;
+	bomb = Sprite::create("bomb1.png");
+	bomb->setScale(2);
+	bomb->setAnchorPoint(Vec2(0, 0));
+	bomb->setPosition(player->getPositionX() + 50 + sign * 55, player->getPositionY() + 60);
+	bomb->setZOrder(6);
+	this->addChild(bomb);
+
+	auto bombanimation = Animation::create();
+	bombanimation->setDelayPerUnit(0.1);
+	bombanimation->addSpriteFrameWithFile("bomb1.png");
+	bombanimation->addSpriteFrameWithFile("bomb2.png");
+	bombanimation->addSpriteFrameWithFile("bomb3.png");
+	bombanimation->addSpriteFrameWithFile("bomb4.png");
+	bombanimation->addSpriteFrameWithFile("bomb5.png");
+	bombanimation->addSpriteFrameWithFile("bomb6.png");
+	bombanimation->addSpriteFrameWithFile("bomb7.png");
+	bombanimation->addSpriteFrameWithFile("bomb8.png");
+	bombanimation->addSpriteFrameWithFile("bomb9.png");
+	bombanimation->addSpriteFrameWithFile("bomb10.png");
+	bombanimation->addSpriteFrameWithFile("bomb11.png");
+	bombanimation->addSpriteFrameWithFile("bomb12.png");
+	bombanimation->addSpriteFrameWithFile("bomb13.png");
+	bombanimation->addSpriteFrameWithFile("bomb14.png");
+	bombanimate = Animate::create(bombanimation);
+	auto bombseq = Sequence::create(bombanimate, Hide::create(), nullptr);
+	bomb->runAction(bombseq);
+
+
+	bezier.controlPoint_1 = Vec2( 0,  150);
+	bezier.controlPoint_2 = Vec2(sign*200,  150);
+	bezier.endPosition = Vec2(sign*200,  -50);
+	auto bezierby = BezierBy::create(1, bezier);
+	bomb->runAction(bezierby);
+	
+}
 
 
 void Weapon::update(float f)
 {
-	
 }
 
