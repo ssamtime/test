@@ -56,6 +56,13 @@ public:
 	cocos2d::Action* bossmoverepforever;
 	cocos2d::Action* bossmoverepforever2;
 
+	/*cocos2d::Action* movetofar1;
+	cocos2d::Action* movetofar2;
+	cocos2d::Action* movetofar3;
+	cocos2d::Action* movetofar4;
+	cocos2d::Action* movetofar5;
+	cocos2d::Action* movetofar6;*/
+
 	cocos2d::Sprite* enemybullet1;
 	cocos2d::Sprite* leftsmallflame;
 	cocos2d::Sprite* rightsmallflame;

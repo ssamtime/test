@@ -89,6 +89,10 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		else
 		{
 			makeMachinegun();
+			//makeMachinegun();
+			//auto delay = DelayTime::create(2.0f); // 2초 지연
+			//auto func = CallFunc::create(CC_CALLBACK_0(Weapon::makeMachinegun(), this)); // 함수 호출
+			//this->runAction(Sequence::create(delay, func, nullptr)); // 시퀀스로 실행
 		}
 		_pressA = true;
 		break;
@@ -97,6 +101,7 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		_pressD = true;
 		break;
 	}
+
 }
 
 void Weapon::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Event* event)
@@ -111,6 +116,7 @@ void Weapon::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Eve
 		_pressD = false;
 		break;
 	}
+
 }
 
 void Weapon::makeBullet()
@@ -136,20 +142,22 @@ void Weapon::makeMachinegun()
 	
 	if (!RIGHT)
 	{
+		sign = -1;
 		playerbullet1 = Sprite::create("machinegun2.png");
 		playerbullet1->setScale(2);
 		playerbullet1->setAnchorPoint(Vec2(1, 0));
-		sign = -1;
 		playerbullet1->setPosition(player->getPositionX() +45 + sign * 55, player->getPositionY() + 60);
 		playerbullet1->setZOrder(5);
 		playerbullet1->setRotation(upPressedTime);
+
+		
 	}
 	else if (RIGHT)
 	{
+		sign = +1;
 		playerbullet1 = Sprite::create("machinegun1.png");
 		playerbullet1->setScale(2);
 		playerbullet1->setAnchorPoint(Vec2(0, 0));
-		sign = +1;
 		playerbullet1->setPosition(player->getPositionX() + 85 + sign * 55, player->getPositionY() + 60);
 		playerbullet1->setZOrder(5);
 		playerbullet1->setRotation(-upPressedTime);
@@ -205,5 +213,6 @@ void Weapon::makebomb()
 
 void Weapon::update(float f)
 {
+		
 }
 

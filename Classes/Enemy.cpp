@@ -247,9 +247,7 @@ bool Enemy::init()
 	leftflamesequence->retain();
 	rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
 	rightflamesequence->retain();
-
-	int a=player->getPositionX(), b=boss->getPositionX();
-	
+		
 
 	isCollided1 = true; // 충돌 체크를 한번만 실행하기 위한 플래그 변수
 	isCollided2 = true;
@@ -258,6 +256,7 @@ bool Enemy::init()
 	arabian2Alive = true;
 	arabian3Alive = true;
 
+	
 
 	this->scheduleUpdate();
 	return true;
@@ -347,13 +346,8 @@ void Enemy::update(float f)
 		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
 		boss->runAction(colorsequnce);
 
-		auto movetofar1 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar2 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar3 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar4 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar5 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar6 = MoveTo::create(0.1, Vec2(0, 3000));
-		if (bosshp == 80)
+		
+		if (bosshp == 90)
 		{
 			boss->setTexture("boss22.png");
 			boss->runAction(shakelittle);
@@ -368,23 +362,24 @@ void Enemy::update(float f)
 			boss->setTexture("boss44.png");
 			boss->runAction(shakelittle);
 		}
-		if (bosshp ==0)
+		if (bosshp ==60)
 		{
 			boss->setTexture("bossdeath.png");
 			boss->runAction(shakeseq3);
-			leftsmallflame->runAction(movetofar1);
-			rightsmallflame->runAction(movetofar2);
-			leftflame->runAction(movetofar3);
-			rightflame->runAction(movetofar4);
-			rightengine->runAction(movetofar5);
-			leftengine->runAction(movetofar6);
+
+			leftsmallflame->setPosition(Vec2(0, 2000));
+			rightsmallflame->setPosition(Vec2(0, 2000));
+			leftflame->setPosition(Vec2(0, 2000));
+			rightflame->setPosition(Vec2(0, 2000));
+			rightengine->setPosition(Vec2(0, 2000));
+			leftengine->setPosition(Vec2(0, 2000));
 		}
 		
 		CCLOG("%d", bosshp);
 	}
 	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()))
 	{
-		bosshp -= 10;
+		bosshp -= 5;
 		bomb->setPosition(Vec2(0, 2000));
 		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
 		auto moveleft = MoveBy::create(0.1, Vec2(-10, 0));
@@ -403,37 +398,34 @@ void Enemy::update(float f)
 		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
 		boss->runAction(colorsequnce);
 
-		auto movetofar1 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar2 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar3 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar4 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar5 = MoveTo::create(0.1, Vec2(0, 3000));
-		auto movetofar6 = MoveTo::create(0.1, Vec2(0, 3000));
-		if (bosshp > 80&& bosshp <= 90)
+		
+		if (bosshp > 85&& bosshp <= 90)
 		{
 			boss->setTexture("boss22.png");
 			boss->runAction(shakelittle);
 		}
-		if (bosshp >70 && bosshp <= 80 )
+		if (bosshp >75 && bosshp <= 80 )
 		{
 			boss->setTexture("boss33.png");
 			boss->runAction(shakelittle);
 		}
-		if (bosshp > 60 && bosshp <= 70 )
+		if (bosshp > 65 && bosshp <= 70 )
 		{
 			boss->setTexture("boss44.png");
 			boss->runAction(shakelittle);
 		}
-		if ( bosshp <= 50 )
+		if (bosshp > 55 && bosshp <= 60)
 		{
 			boss->setTexture("bossdeath.png");
 			boss->runAction(shakeseq3);
-			leftsmallflame->runAction(movetofar1);
-			rightsmallflame->runAction(movetofar2);
-			leftflame->runAction(movetofar3);
-			rightflame->runAction(movetofar4);
-			rightengine->runAction(movetofar5);
-			leftengine->runAction(movetofar6);
+
+			leftsmallflame->setPosition(Vec2(0, 2000));
+			rightsmallflame->setPosition(Vec2(0, 2000));
+			leftflame->setPosition(Vec2(0, 2000));
+			rightflame->setPosition(Vec2(0, 2000));
+			rightengine->setPosition(Vec2(0, 2000));
+			leftengine->setPosition(Vec2(0, 2000));
+
 		}
 
 		CCLOG("%d", bosshp);
@@ -458,7 +450,7 @@ void Enemy::update(float f)
 		bossidle = false;
 	}
 
-	if (bosshp>0)
+	if (bosshp>60)
 	{
 		rightengine->setPosition(Vec2(boss->getPositionX() + 600, boss->getPositionY() + 150));
 		leftengine->setPosition(Vec2(boss->getPositionX() + 23, boss->getPositionY() + 151));
