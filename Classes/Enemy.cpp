@@ -3,8 +3,13 @@
 USING_NS_CC;
 
 cocos2d::Sprite* playerbullet1;
+cocos2d::Sprite* playerbullet2;
 cocos2d::Sprite* bomb;
-//¸ñ¼û ÃÑ¾Ë ÆøÅº¸¸µé±â
+//¸ñ¼û Á¡¼ö ¸¸µé±â 
+//ÆøÅº ´êÀ¸¸é ÅÍÁö´ÂÈ¿°ú 
+//¿ÀÇÁ´× µ·³Ö°í ½ÃÀÛ 
+//ÄÉ¸¯ÅÍ ¼±ÅÃÈ­¸é..
+//Á×¾úÀ»¶§ ¿¬°áÀÌ³ª ¸ñ¼û±îÁö°í ºÎÈ°
 
 Enemy::Enemy()
 {
@@ -43,7 +48,7 @@ bool Enemy::init()
 	boss = Sprite::create("boss1.png");
 	boss->setScale(3);
 	boss->setAnchorPoint(Vec2(0, 0));
-	boss->setPosition(Vec2(1000, 300));
+	boss->setPosition(Vec2(2000, 340));
 	boss->setZOrder(5);
 	this->addChild(boss);
 	bosshp = 100;
@@ -131,7 +136,7 @@ bool Enemy::init()
 	
 	leftflame = Sprite::create("hollow.png");
 	leftflame->setAnchorPoint(Vec2(0, 0));
-	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));
+	leftflame->setPosition(Vec2(boss->getPositionX() + 72, boss->getPositionY() - 352));//
 	leftflame->setScale(3);
 	leftflame->setZOrder(6);
 	this->addChild(leftflame);
@@ -243,9 +248,9 @@ bool Enemy::init()
 
 	auto callFunc = CallFunc::create(CC_CALLBACK_0(Enemy::AnimationCallback, this));
 
-	leftflamesequence = Sequence::create(leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, leftsmallflameanimate, callFunc, nullptr);
+	leftflamesequence = Sequence::create(leftsmallflameanimate, leftsmallflameanimate ,callFunc, nullptr);
 	leftflamesequence->retain();
-	rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
+	rightflamesequence = Sequence::create(rightsmallflameanimate, rightsmallflameanimate,callFunc, nullptr);
 	rightflamesequence->retain();
 		
 
@@ -256,7 +261,7 @@ bool Enemy::init()
 	arabian2Alive = true;
 	arabian3Alive = true;
 
-	
+	enterbossstage =false;
 
 	this->scheduleUpdate();
 	return true;
@@ -325,10 +330,11 @@ void Enemy::update(float f)
 		isCollided3 = false;
 		arabian3Alive = false;
 	}
-	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) )
+	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox())|| boss->getBoundingBox().intersectsRect(playerbullet2->getBoundingBox()) )
 	{
 		bosshp -= 1;
 		playerbullet1->setPosition(Vec2(0, 2000));
+		playerbullet2->setPosition(Vec2(0, 2000));
 		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
 		auto moveleft = MoveBy::create(0.1, Vec2(-10, 0));
 		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
@@ -377,7 +383,7 @@ void Enemy::update(float f)
 		
 		CCLOG("%d", bosshp);
 	}
-	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()))
+	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()) )
 	{
 		bosshp -= 5;
 		bomb->setPosition(Vec2(0, 2000));
@@ -386,8 +392,8 @@ void Enemy::update(float f)
 		auto shakeseq = Sequence::create(movebyright, moveleft, nullptr);
 		auto shakelittle = Repeat::create(shakeseq, 3);
 
-		auto movebyright2 = MoveBy::create(0.5, Vec2(100, -20));
-		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, -20));
+		auto movebyright2 = MoveBy::create(0.5, Vec2(120, -25));
+		auto moveleft2 = MoveBy::create(0.5, Vec2(-100, -25));
 		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
 		auto shakebig = Repeat::create(shakeseq2, 5);
 		auto hideaction = Hide::create();
@@ -448,6 +454,10 @@ void Enemy::update(float f)
 		boss->runAction(bossmoverepforever2);
 
 		bossidle = false;
+	}
+	if (player->getPositionX() >= boss->getPositionX() +200)
+	{
+		enterbossstage = true;
 	}
 
 	if (bosshp>60)

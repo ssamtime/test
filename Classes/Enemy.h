@@ -92,4 +92,5 @@ extern cocos2d::Sprite* rightflame;
 extern bool arabian1Alive;
 extern bool arabian2Alive;
 extern bool arabian3Alive;
+extern bool enterbossstage;
 extern int bosshp;

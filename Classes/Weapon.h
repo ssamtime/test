@@ -45,6 +45,7 @@ private:
 };
 
 extern cocos2d::Sprite* playerbullet1;
+extern cocos2d::Sprite* playerbullet2;
 extern cocos2d::Sprite* machinegunCapsule;
 extern cocos2d::Sprite* bomb;
 extern bool isMachinegun;

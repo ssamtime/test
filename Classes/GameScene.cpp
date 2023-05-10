@@ -37,6 +37,14 @@ bool GameScene::init()
 
     Enemy* enemy = Enemy::create();
     addChild(enemy);
+
+    //auto label = Label::createWithTTF("Hello, world!", "fonts/Marker Felt.ttf", 24); // 라벨 생성
+
+    //label->setPosition(Vec2(200, 200)); // 라벨 위치 설정
+
+    //this->addChild(label); 
+
+
     return true;
 }
 

@@ -21,6 +21,7 @@ bool arabian3Alive;
 cocos2d::Sprite* machinegunCapsule;
 bool isMachinegun;
 
+bool enterbossstage;
 Player::Player()
 {
 }
@@ -227,11 +228,12 @@ void Player::update(float f)
 		machinegunCapsule->setVisible(false);
 	}
 
-	if (leftflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedleftflame  && playerAlive)
+	if (leftflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedleftflame  && playerAlive &&enterbossstage)
 	{
 		playerDeath();
 		playerAlive = false;
 		isCollidedleftflame = false;
+		enterbossstage = false;
 	}
 
 	if (rightflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedrightflame && playerAlive)
