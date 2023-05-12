@@ -8,12 +8,7 @@ cocos2d::Sprite* bomb;
 
 cocos2d::Sprite* digits[10];
 
-//오프닝 
-//돈넣고 시작 
-//케릭터 선택화면
-//죽었을때 연결이나 목숨까지고 부활
-//폭탄 닿으면 터지는효과 
-//돈넣으면소리 총쏘는소리 죽는소리 보스터지는소리
+
 Enemy::Enemy()
 {
 }
@@ -410,7 +405,8 @@ void Enemy::update(float f)
 		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
 		auto shakebig = Repeat::create(shakeseq2, 5);
 		auto hideaction = Hide::create();
-		auto shakeseq3 = Sequence::create(shakebig, hideaction, nullptr);
+		auto movefaraway = MoveTo::create(0.1, Vec2(0, 2000));
+		auto shakeseq3 = Sequence::create(shakebig, hideaction, movefaraway, nullptr);
 
 		auto turnred = TintTo::create(0.1f, Color3B::RED);
 		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);

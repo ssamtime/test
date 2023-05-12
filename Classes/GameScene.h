@@ -21,6 +21,7 @@ public:
 
     cocos2d::Label* scorelabel;
     cocos2d::Label* guncountlabel;
+    cocos2d::Label* bombcountlabel;
     
     void update(float f)override;
 

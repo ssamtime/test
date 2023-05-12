@@ -1,9 +1,6 @@
 
 #include "Player.h"
-#include <extensions/cocos-ext.h>
-#include <cocos-ext.h>
 USING_NS_CC;
-USING_NS_CC_EXT;
 
 cocos2d::Sprite* player;
 bool _left;
@@ -99,16 +96,18 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		{
 			if (machinguncount>0) {
 				makeMachinegun();
+				machinguncount -= 1;
 			}
-			machinguncount -= 1;
+			
 		}
 		_pressA = true;
 		break;
 	case EventKeyboard::KeyCode::KEY_D:
 		if (bombcount>0) {
 			makebomb();
+			bombcount -= 1;
 		}
-		bombcount -= 1;
+		
 		_pressD = true;
 		break;
 	}

@@ -134,7 +134,7 @@ bool GameScene::init()
 
     char bombcountstr[20];
     sprintf(bombcountstr, "%d", bombcount);
-    auto bombcountlabel = Label::createWithTTF(bombcountstr, "fonts/metal-slug.ttf", 24);
+    bombcountlabel = Label::createWithTTF(bombcountstr, "fonts/metal-slug.ttf", 24);
     bombcountlabel->setPosition(Vec2(485, 700));
     //scorelabel->setTextColor(Color4B(255, 165, 0, 255));
     bombcountlabel->setTextColor(Color4B(255, 200, 50, 255));
@@ -149,7 +149,7 @@ bool GameScene::init()
     this->addChild(infinitysprite);
     
     guncountlabel = Label::createWithTTF("¡Ä", "fonts/metal-slug.ttf", 24);
-    guncountlabel->setPosition(Vec2(360, 700));
+    guncountlabel->setPosition(Vec2(365, 700));
     guncountlabel->setTextColor(Color4B(255, 200, 50, 255));
     guncountlabel->enableShadow(Color4B::BLACK, Size(2, -2), 6);
     this->addChild(guncountlabel);
@@ -175,6 +175,9 @@ void GameScene::update(float f)
         guncountlabel->setString(guncountstr);
     }
     
+    char bombcountstr[20];
+    sprintf(bombcountstr, "%d", bombcount);
+    bombcountlabel->setString(bombcountstr);
 
 }
 
