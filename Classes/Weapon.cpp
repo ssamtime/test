@@ -11,11 +11,13 @@ bool _right;
 bool _up;
 bool RIGHT;
 float upPressedTime;
-
+int machinguncount;
+int bombcount;
 
 
 Weapon::Weapon()
 {
+	isMachinegun = false;
 }
 
 Weapon::~Weapon()
@@ -48,9 +50,10 @@ bool Weapon::init()
 	machinegunCapsule->setScale(3);
 	this->addChild(machinegunCapsule);
 
-	isMachinegun = false;
+	
 
-	bomb = Sprite::create("bombhollow.png");
+	//bomb = Sprite::create("bombhollow.png");
+	bomb = Sprite::create("hollow.png");
 	bomb->setAnchorPoint(Vec2(0, 0));
 	bomb->setPosition(player->getPositionX(), player->getPositionY() -1000);
 	bomb->setZOrder(5);
@@ -94,13 +97,18 @@ void Weapon::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		}
 		else
 		{
-			makeMachinegun();
-
+			if (machinguncount>0) {
+				makeMachinegun();
+			}
+			machinguncount -= 1;
 		}
 		_pressA = true;
 		break;
 	case EventKeyboard::KeyCode::KEY_D:
-		makebomb();
+		if (bombcount>0) {
+			makebomb();
+		}
+		bombcount -= 1;
 		_pressD = true;
 		break;
 	}
@@ -159,7 +167,7 @@ void Weapon::makeMachinegun()
 		playerbullet2->setZOrder(5);
 		playerbullet2->setRotation(upPressedTime);
 		if (upPressedTime > 15)
-			playerbullet2->setPosition(player->getPositionX() + 45 + sign * 35, player->getPositionY() + 40);
+			playerbullet2->setPosition(player->getPositionX() + 45 + sign * 40, player->getPositionY() + 40);
 		else
 			playerbullet2->setPosition(player->getPositionX() + 45 + sign * 155, player->getPositionY() + 40);
 		
@@ -181,7 +189,7 @@ void Weapon::makeMachinegun()
 		playerbullet2->setZOrder(5);
 		playerbullet2->setRotation(-upPressedTime);
 		if (upPressedTime > 15)
-			playerbullet2->setPosition(player->getPositionX() + 85 + sign * 35, player->getPositionY() + 40);
+			playerbullet2->setPosition(player->getPositionX() + 85 + sign * 40, player->getPositionY() + 40);
 		else
 			playerbullet2->setPosition(player->getPositionX() + 85 + sign * 155, player->getPositionY() + 40);
 	}

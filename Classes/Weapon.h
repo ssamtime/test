@@ -24,8 +24,7 @@ public:
     
     cocos2d::EventListenerKeyboard* _listener;
 
-    bool _pressA;
-    bool _pressD;
+    
 
     int sign;
 
@@ -49,3 +48,5 @@ extern cocos2d::Sprite* playerbullet2;
 extern cocos2d::Sprite* machinegunCapsule;
 extern cocos2d::Sprite* bomb;
 extern bool isMachinegun;
+extern bool _pressA;
+extern bool _pressD;

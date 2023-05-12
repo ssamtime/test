@@ -5,12 +5,15 @@ USING_NS_CC;
 cocos2d::Sprite* playerbullet1;
 cocos2d::Sprite* playerbullet2;
 cocos2d::Sprite* bomb;
-//목숨 점수 만들기 
-//폭탄 닿으면 터지는효과 
-//오프닝 돈넣고 시작 
-//케릭터 선택화면..
-//죽었을때 연결이나 목숨까지고 부활
 
+cocos2d::Sprite* digits[10];
+
+//오프닝 
+//돈넣고 시작 
+//케릭터 선택화면
+//죽었을때 연결이나 목숨까지고 부활
+//폭탄 닿으면 터지는효과 
+//돈넣으면소리 총쏘는소리 죽는소리 보스터지는소리
 Enemy::Enemy()
 {
 }
@@ -294,6 +297,8 @@ void Enemy::update(float f)
 		playerbullet1->setPosition(Vec2(0, 2000));
 		isCollided1 = false;
 		arabian1Alive = false;
+		score += 100;
+		
 	}
 	if (arabian1->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided1)
 	{
@@ -301,6 +306,7 @@ void Enemy::update(float f)
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided1 = false;
 		arabian1Alive = false;
+		score += 100;
 	}
 	if (arabian2->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided2 )
 	{
@@ -308,6 +314,7 @@ void Enemy::update(float f)
 		playerbullet1->setPosition(Vec2(0, 2000));
 		isCollided2 = false;
 		arabian2Alive = false;
+		score += 100;
 	}
 	if (arabian2->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided2)
 	{
@@ -315,6 +322,7 @@ void Enemy::update(float f)
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided2 = false;
 		arabian2Alive = false;
+		score += 100;
 	}
 	if (arabian3->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided3 )
 	{
@@ -322,6 +330,7 @@ void Enemy::update(float f)
 		playerbullet1->setPosition(Vec2(0, 2000));
 		isCollided3 = false;
 		arabian3Alive = false;
+		score += 100;
 	}
 	if (arabian3->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided3)
 	{
@@ -329,10 +338,12 @@ void Enemy::update(float f)
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided3 = false;
 		arabian3Alive = false;
+		score += 100;
 	}
 	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox())|| boss->getBoundingBox().intersectsRect(playerbullet2->getBoundingBox()) )
 	{
 		bosshp -= 1;
+		score += 10;
 		playerbullet1->setPosition(Vec2(0, 2000));
 		playerbullet2->setPosition(Vec2(0, 2000));
 		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
@@ -379,6 +390,7 @@ void Enemy::update(float f)
 			rightflame->setPosition(Vec2(0, 2000));
 			rightengine->setPosition(Vec2(0, 2000));
 			leftengine->setPosition(Vec2(0, 2000));
+			score += 10000;
 		}
 		
 		CCLOG("%d", bosshp);
@@ -386,6 +398,7 @@ void Enemy::update(float f)
 	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()) )
 	{
 		bosshp -= 5;
+		score += 100;
 		bomb->setPosition(Vec2(0, 2000));
 		auto movebyright = MoveBy::create(0.1, Vec2(10, 0));
 		auto moveleft = MoveBy::create(0.1, Vec2(-10, 0));
@@ -432,6 +445,7 @@ void Enemy::update(float f)
 			rightengine->setPosition(Vec2(0, 2000));
 			leftengine->setPosition(Vec2(0, 2000));
 
+			score += 10000;
 		}
 
 		CCLOG("%d", bosshp);

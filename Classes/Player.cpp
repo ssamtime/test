@@ -22,6 +22,8 @@ cocos2d::Sprite* machinegunCapsule;
 bool isMachinegun;
 
 bool enterbossstage;
+int score;
+
 Player::Player()
 {
 }
