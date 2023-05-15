@@ -4,6 +4,7 @@
 #include "GameScene.h"
 #include "Enemy.h"
 #include "Weapon.h"
+#include "StartScene.h"
 
 class Player : public cocos2d::Layer
 {
@@ -27,7 +28,8 @@ public:
 
     cocos2d::EventListenerKeyboard* _listener;
 
-    
+    cocos2d::Label* creditlabel;
+
     bool _down;
 
     bool isCollided1;
@@ -35,6 +37,7 @@ public:
     bool isCollided3;
     bool isCollidedleftflame;
     bool isCollidedrightflame;
+    bool iscollidedcapsule;
 
     bool playerAlive;
     void update(float f)override;
@@ -43,7 +46,10 @@ public:
     void moveBackground();
 
     void playerDeath();
- 
+    void animationCallback();
+    int soundId12;
+
+    cocos2d::Animate* mergeanimate;
 private:
 
 };

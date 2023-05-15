@@ -11,6 +11,7 @@ cocos2d::Sprite* leftengine;
 cocos2d::Sprite* rightengine;
 cocos2d::Sprite* leftflame;
 cocos2d::Sprite* rightflame;
+cocos2d::Sprite* life;
 
 int bosshp;
 
@@ -53,7 +54,8 @@ bool Player::init()
 	mergeanimation->addSpriteFrameWithFile("playeremerge6.png");
 	mergeanimation->addSpriteFrameWithFile("Fio.png");
 
-	auto mergeanimate = Animate::create(mergeanimation);
+	mergeanimate = Animate::create(mergeanimation);
+	mergeanimate->retain();
 	player->runAction(mergeanimate);
 
 	playerAlive = true;
@@ -65,6 +67,19 @@ bool Player::init()
 	isCollided1 = true;
 	isCollided2 = true;
 	isCollided3 = true;
+	iscollidedcapsule = true;
+
+	char creditstr[20];
+	sprintf(creditstr, "%d", credit);
+	char str1[20] = "CREDITS : ";
+	strcat(str1, creditstr);
+
+	creditlabel = Label::createWithTTF(str1, "fonts/metal-slug.ttf", 24);
+	creditlabel->setPosition(Vec2(880, 60));
+	creditlabel->setTextColor(Color4B(220, 228, 237, 255));
+	creditlabel->setZOrder(9);
+	creditlabel->enableShadow(Color4B::BLACK, Size(2, -2), 4);
+	this->addChild(creditlabel);
 	
 	this->scheduleUpdate();
 
@@ -112,6 +127,11 @@ void Player::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::Even
 		_up = true;
 		this->unschedule(schedule_selector(Player::discountUppressedTime));
 		this->schedule(schedule_selector(Player::countUppressedTime), 0.15f);
+		break;
+	case EventKeyboard::KeyCode::KEY_1:
+		credit += 1;
+
+		soundId12 = cocos2d::experimental::AudioEngine::play2d("sound/insertcoin.mp3");
 		break;
 	}
 }
@@ -224,10 +244,13 @@ void Player::update(float f)
 		isCollided3 = false;
 	}
 	
-	if (machinegunCapsule->getBoundingBox().intersectsRect(player->getBoundingBox()))
+	if (machinegunCapsule->getBoundingBox().intersectsRect(player->getBoundingBox())&&iscollidedcapsule)
 	{
 		isMachinegun = true;
 		machinegunCapsule->setVisible(false);
+		int soundId10 = cocos2d::experimental::AudioEngine::play2d("sound/Machine Gun.mp3");
+		cocos2d::experimental::AudioEngine::setVolume(soundId10, 0.5);
+		iscollidedcapsule = false;
 	}
 
 	if (leftflame->getBoundingBox().intersectsRect(player->getBoundingBox()) && isCollidedleftflame  && playerAlive &&enterbossstage)
@@ -244,6 +267,13 @@ void Player::update(float f)
 		playerAlive = false;
 		isCollidedrightflame = false;
 	}
+
+	char creditstr[20];
+	sprintf(creditstr, "%d", credit);
+	char str1[20] = "CREDITS :";
+	strcat(str1, creditstr);
+
+	creditlabel->setString(str1);
 }
 
 void Player::jump()
@@ -283,6 +313,9 @@ void Player::countUppressedTime(float f)
 
 void Player::playerDeath()
 {
+	int soundId9 = cocos2d::experimental::AudioEngine::play2d("sound/FioDeathScream.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId9, 0.3);
+
 	player->stopAllActions();
 	background1->stopAllActions();
 	if (player->getPositionY() > 100)
@@ -293,6 +326,8 @@ void Player::playerDeath()
 	_right = false;
 	_left = false;
 	
+	this->getEventDispatcher()->setEnabled(false);
+
 	auto deathanimation = Animation::create();
 	deathanimation->setDelayPerUnit(0.12);
 
@@ -321,7 +356,16 @@ void Player::playerDeath()
 	deathanimation->addSpriteFrameWithFile("playerdeath23.png");
 
 	auto deathanimate = Animate::create(deathanimation);
-	player->runAction(deathanimate);
+	auto callbackf = CallFunc::create(CC_CALLBACK_0(Player::animationCallback, this));
+	auto sequence = Sequence::create(deathanimate,DelayTime::create(1.0f), callbackf, nullptr);
+	player->runAction(sequence);
 
-	this->getEventDispatcher()->setEnabled(false);
+	life->setTexture("life0.png");
+
+}
+
+void Player::animationCallback()
+{
+	this->getEventDispatcher()->setEnabled(true);
+	player->runAction(mergeanimate);
 }

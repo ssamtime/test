@@ -2,13 +2,8 @@
 
 USING_NS_CC;
 
-
-//오프닝 
-//돈넣고 시작 
-//케릭터 선택화면
+//credit표시
 //죽었을때 연결이나 목숨까지고 부활
-//폭탄 닿으면 터지는효과 
-//돈넣으면소리 총쏘는소리 죽는소리 보스터지는소리
 
 Scene* StartScene::createScene()
 {
@@ -25,11 +20,26 @@ bool StartScene::init()
         return false;
     }
 
-    coin = 0;
+    soundId = cocos2d::experimental::AudioEngine::play2d("sound/Title.mp3");
+        
+    credit = 0;
     isshown = false;
 
     auto wlayer = LayerColor::create(Color4B::WHITE);
     this->addChild(wlayer);
+
+    char creditstr[20];
+    sprintf(creditstr, "%d", credit);
+    char str1[20] = "CREDITS : ";
+    strcat(str1, creditstr);
+
+    creditlabel = Label::createWithTTF(str1, "fonts/metal-slug.ttf", 24);
+    creditlabel->setPosition(Vec2(880, 60));
+    creditlabel->setTextColor(Color4B(220, 228, 237, 255));
+    creditlabel->setZOrder(9);
+    creditlabel->enableShadow(Color4B::BLACK, Size(2, -2), 4);
+    this->addChild(creditlabel);
+
 
     auto opening = Sprite::create("opening/Opening_0.png");
     opening->setAnchorPoint(Vec2(0, 0));
@@ -50,8 +60,7 @@ bool StartScene::init()
 
     opening->runAction(openinganimate);
 
-   
-   
+    this->scheduleUpdate();
 
     return true;
 }
@@ -82,17 +91,16 @@ void StartScene::onKeyPressed(cocos2d::EventKeyboard::KeyCode keycode, cocos2d::
     {
 
     case EventKeyboard::KeyCode::KEY_1:
-        coin += 1;
+        credit += 1;
         if (!isshown) {
             showmessage();
         }
-         
+        soundId = cocos2d::experimental::AudioEngine::play2d("sound/insertcoin.mp3");
         break;
     case EventKeyboard::KeyCode::KEY_A:
-        /*_director->getTextureCache()->removeUnusedTextures();
+        
+        cocos2d::experimental::AudioEngine::stop(soundId);
 
-        auto pScene = GameScene::createScene();
-        Director::getInstance()->replaceScene(pScene);*/
         _director->getTextureCache()->removeUnusedTextures();
 
         auto pScene = ChooseScene::createScene();
@@ -114,6 +122,16 @@ void StartScene::onKeyReleased(cocos2d::EventKeyboard::KeyCode keycode, cocos2d:
         
         break;
     }
+}
+
+void StartScene::update(float f)
+{
+    char creditstr[20];
+    sprintf(creditstr, "%d", credit);
+    char str1[20] = "CREDITS :";
+    strcat(str1, creditstr);
+        
+    creditlabel->setString(str1);
 }
 
 void StartScene::showmessage()

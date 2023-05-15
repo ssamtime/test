@@ -27,6 +27,9 @@ bool GameScene::init()
     {
         return false;
     }
+    int soundId5 = cocos2d::experimental::AudioEngine::play2d("sound/Mission1START.mp3");
+    cocos2d::experimental::AudioEngine::setVolume(soundId5, 0.5);
+    
 
     auto wlayer = LayerColor::create(Color4B::WHITE);
     this->addChild(wlayer);
@@ -49,21 +52,21 @@ bool GameScene::init()
     auto fuelbar = Sprite::create("fuelbar.png");
     fuelbar->setScale(4);
     fuelbar->setAnchorPoint(Vec2(0, 0));
-    fuelbar->setPosition(Vec2(50, 675));
+    fuelbar->setPosition(Vec2(40, 675));
     fuelbar->setZOrder(5);
     this->addChild(fuelbar);
 
     auto armsbombboundary = Sprite::create("armsbomb.png");
     armsbombboundary->setScale(4);
     armsbombboundary->setAnchorPoint(Vec2(0, 0));
-    armsbombboundary->setPosition(Vec2(300, 670));
+    armsbombboundary->setPosition(Vec2(270, 670));
     armsbombboundary->setZOrder(5);
     this->addChild(armsbombboundary);
 
     char scorestr[20];
     sprintf(scorestr, "%d", score);
     scorelabel = Label::createWithTTF(scorestr, "fonts/metal-slug.ttf", 24);
-    scorelabel->setPosition(Vec2(230, 730));
+    scorelabel->setPosition(Vec2(200, 730));
     scorelabel->setTextColor(Color4B(220, 228, 237, 255));
     scorelabel->enableShadow(Color4B::BLACK, Size(2, -2), 4);
     this->addChild(scorelabel);
@@ -96,7 +99,7 @@ bool GameScene::init()
     lifeequal->setZOrder(5);
     this->addChild(lifeequal);
 
-    auto life = Sprite::create("life1.png");
+    life = Sprite::create("life1.png");
     life->setScale(3);
     life->setAnchorPoint(Vec2(0, 0));
     life->setPosition(Vec2(175, 650));
@@ -105,7 +108,7 @@ bool GameScene::init()
 
     auto timesprite = Sprite::create("9.png");
     timesprite->setAnchorPoint(Vec2(0, 0));
-    timesprite->setPosition(Vec2(615, 670));
+    timesprite->setPosition(Vec2(575, 670));
     timesprite->setScale(3);
     timesprite->setZOrder(6);
     this->addChild(timesprite);
@@ -127,7 +130,7 @@ bool GameScene::init()
 
     auto timesprite5 = Sprite::create("5.png");
     timesprite5->setAnchorPoint(Vec2(0, 0));
-    timesprite5->setPosition(Vec2(560, 670));
+    timesprite5->setPosition(Vec2(520, 670));
     timesprite5->setScale(3);
     timesprite5->setZOrder(6);
     this->addChild(timesprite5);
@@ -135,7 +138,7 @@ bool GameScene::init()
     char bombcountstr[20];
     sprintf(bombcountstr, "%d", bombcount);
     bombcountlabel = Label::createWithTTF(bombcountstr, "fonts/metal-slug.ttf", 24);
-    bombcountlabel->setPosition(Vec2(485, 700));
+    bombcountlabel->setPosition(Vec2(455, 700));
     //scorelabel->setTextColor(Color4B(255, 165, 0, 255));
     bombcountlabel->setTextColor(Color4B(255, 200, 50, 255));
     bombcountlabel->enableShadow(Color4B::BLACK, Size(2, -2), 6);
@@ -143,13 +146,13 @@ bool GameScene::init()
 
     infinitysprite = Sprite::create("infinity.png");
     infinitysprite->setAnchorPoint(Vec2(0, 0));
-    infinitysprite->setPosition(Vec2(350, 677));
+    infinitysprite->setPosition(Vec2(320, 677));
     infinitysprite->setScale(1.5f);
     infinitysprite->setZOrder(6);
     this->addChild(infinitysprite);
     
     guncountlabel = Label::createWithTTF("¡Ä", "fonts/metal-slug.ttf", 24);
-    guncountlabel->setPosition(Vec2(365, 700));
+    guncountlabel->setPosition(Vec2(335, 700));
     guncountlabel->setTextColor(Color4B(255, 200, 50, 255));
     guncountlabel->enableShadow(Color4B::BLACK, Size(2, -2), 6);
     this->addChild(guncountlabel);

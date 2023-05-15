@@ -19,10 +19,13 @@ Enemy::~Enemy()
 
 bool Enemy::init()
 {
+	soundId7 = cocos2d::experimental::AudioEngine::play2d("sound/mission1bgm.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId7, 0.3);
+
 	arabian1 = Sprite::create("arabian.png");
 	arabian1->setScale(3);
 	arabian1->setAnchorPoint(Vec2(0, 0));
-	arabian1->setPosition(Vec2(800, 100));
+	arabian1->setPosition(Vec2(1000, 100));
 	arabian1->setZOrder(4);
     this->addChild(arabian1);
 	arabianrunning1(arabian1);
@@ -30,7 +33,7 @@ bool Enemy::init()
 	arabian2 = Sprite::create("arabian.png");
 	arabian2->setScale(3);
 	arabian2->setAnchorPoint(Vec2(0, 0));
-	arabian2->setPosition(Vec2(1000, 100));
+	arabian2->setPosition(Vec2(1300, 100));
 	arabian2->setZOrder(4);
 	this->addChild(arabian2);
 	arabianrunning2(arabian2);
@@ -38,7 +41,7 @@ bool Enemy::init()
 	arabian3 = Sprite::create("arabian.png");
 	arabian3->setScale(3);
 	arabian3->setAnchorPoint(Vec2(0, 0));
-	arabian3->setPosition(Vec2(1200, 100));
+	arabian3->setPosition(Vec2(1500, 100));
 	arabian3->setZOrder(4);
 	this->addChild(arabian3);
 	arabianrunning3(arabian3);
@@ -46,7 +49,7 @@ bool Enemy::init()
 	boss = Sprite::create("boss1.png");
 	boss->setScale(3);
 	boss->setAnchorPoint(Vec2(0, 0));
-	boss->setPosition(Vec2(2000, 340));
+	boss->setPosition(Vec2(2500, 360));
 	boss->setZOrder(5);
 	this->addChild(boss);
 	bosshp = 100;
@@ -265,6 +268,43 @@ bool Enemy::init()
 	return true;
 }
 
+void Enemy::bombfire(cocos2d::Sprite* object)
+{
+	int soundId8 = cocos2d::experimental::AudioEngine::play2d("sound/bombfire.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId8, 0.1);
+
+	auto collisionPoint = (bomb->getPosition() + object->getPosition() ) /2;
+	//auto collisionPoint =  arabian1->getPosition();
+
+	auto bombanimationSprite = cocos2d::Sprite::create("bomb1.png");
+	bombanimationSprite->setAnchorPoint(Vec2(0, 0));
+	bombanimationSprite->setScale(2);
+	bombanimationSprite->setPosition(collisionPoint);
+	bombanimationSprite->setZOrder(7);
+	this->addChild(bombanimationSprite);
+
+	auto bombfiresprite1 = Sprite::create("bombfirerow2.png");
+	auto bombfiretexture1 = bombfiresprite1->getTexture();
+	auto bombfireanimation1 = Animation::create();
+	bombfireanimation1->setDelayPerUnit(0.1);
+	bombfireanimation1->addSpriteFrameWithFile("bombfire1.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire2.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire3.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire4.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire5.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire6.png");
+	bombfireanimation1->addSpriteFrameWithFile("bombfire7.png");
+	for (int i = 0; i < 12; i++)
+	{
+		bombfireanimation1->addSpriteFrameWithTexture(bombfiretexture1, Rect(i * 50.3, 0, 50.3, 112));
+	}
+
+	auto bombfireanimate1 = Animate::create(bombfireanimation1);
+	
+	bombanimationSprite->runAction(bombfireanimate1);
+		
+	}
+
 void Enemy::AnimationCallback()
 {
 	leftsmallflame->setVisible(false);
@@ -297,11 +337,15 @@ void Enemy::update(float f)
 	}
 	if (arabian1->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided1)
 	{
+		bombfire(arabian1);
 		arabiandeath(arabian1, 11, 12);
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided1 = false;
 		arabian1Alive = false;
 		score += 100;
+
+		
+		
 	}
 	if (arabian2->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided2 )
 	{
@@ -313,11 +357,13 @@ void Enemy::update(float f)
 	}
 	if (arabian2->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided2)
 	{
+		bombfire(arabian2);
 		arabiandeath(arabian2, 21, 22);
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided2 = false;
 		arabian2Alive = false;
 		score += 100;
+		
 	}
 	if (arabian3->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox()) && isCollided3 )
 	{
@@ -329,11 +375,13 @@ void Enemy::update(float f)
 	}
 	if (arabian3->getBoundingBox().intersectsRect(bomb->getBoundingBox()) && isCollided3)
 	{
+		bombfire(arabian3);
 		arabiandeath(arabian3, 31, 32);
 		bomb->setPosition(Vec2(0, 2000));
 		isCollided3 = false;
 		arabian3Alive = false;
 		score += 100;
+		
 	}
 	if (boss->getBoundingBox().intersectsRect(playerbullet1->getBoundingBox())|| boss->getBoundingBox().intersectsRect(playerbullet2->getBoundingBox()) )
 	{
@@ -351,12 +399,18 @@ void Enemy::update(float f)
 		auto shakeseq2 = Sequence::create(movebyright2, moveleft2, nullptr);
 		auto shakebig = Repeat::create(shakeseq2, 5);
 		auto hideaction = Hide::create();
-		auto shakeseq3 = Sequence::create(shakebig, hideaction , nullptr);
+		auto movefaraway = MoveTo::create(0.1, Vec2(0, 2000));
 
+		auto callFunc2 = CallFunc::create(CC_CALLBACK_0(Enemy::onAnimationEnded, this));
+
+		auto shakeseq3 = Sequence::create(shakebig, hideaction, movefaraway,
+			callFunc2 ,nullptr);
+				
 		auto turnred = TintTo::create(0.1f, Color3B::RED);
 		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);
 		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
-		boss->runAction(colorsequnce);
+		if(bosshp>60)
+			boss->runAction(colorsequnce);
 
 		
 		if (bosshp == 90)
@@ -392,6 +446,7 @@ void Enemy::update(float f)
 	}
 	if (boss->getBoundingBox().intersectsRect(bomb->getBoundingBox()) )
 	{
+		bombfire(boss);
 		bosshp -= 5;
 		score += 100;
 		bomb->setPosition(Vec2(0, 2000));
@@ -406,8 +461,12 @@ void Enemy::update(float f)
 		auto shakebig = Repeat::create(shakeseq2, 5);
 		auto hideaction = Hide::create();
 		auto movefaraway = MoveTo::create(0.1, Vec2(0, 2000));
-		auto shakeseq3 = Sequence::create(shakebig, hideaction, movefaraway, nullptr);
+		
+		auto callFunc2 = CallFunc::create(CC_CALLBACK_0(Enemy::onAnimationEnded, this));
 
+		auto shakeseq3 = Sequence::create(shakebig, hideaction, movefaraway,
+			callFunc2, nullptr);
+		
 		auto turnred = TintTo::create(0.1f, Color3B::RED);
 		auto returncolor = TintTo::create(0.1f, Color3B::WHITE);
 		auto colorsequnce = Sequence::create(turnred, returncolor, nullptr);
@@ -484,6 +543,9 @@ void Enemy::update(float f)
 
 void Enemy::arabiandeath(cocos2d::Sprite* obj,int n1,int n2)
 {
+	int soundId8 = cocos2d::experimental::AudioEngine::play2d("sound/soldierdie.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId8, 0.3);
+
 	obj->stopActionByTag(n1);
 	obj->stopActionByTag(n2);
 	
@@ -589,5 +651,11 @@ void Enemy::arabianrunning3(cocos2d::Sprite* obj)
 	pMoveBy3->setTag(32);
 }
 
+void Enemy::onAnimationEnded() {
+	// 애니메이션이 종료될 때 실행되는 코드
+	int soundId6 = cocos2d::experimental::AudioEngine::play2d("sound/missioncomplete.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId6, 0.9);
 
+	cocos2d::experimental::AudioEngine::stop(soundId7);
+}
 

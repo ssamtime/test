@@ -140,11 +140,16 @@ void Weapon::makeBullet()
 		sign = -1;
 	else if (RIGHT)
 		sign = +1;
-	auto movebullet1 = MoveBy::create(0.8, Vec2(sign * 1000 * (!_up), 1000 * _up));
+	auto movebullet1 = MoveBy::create(1.0, Vec2(sign * 1000 * (!_up), 1000 * _up));
 	playerbullet1->setPosition(player->getPositionX() + 50 + sign * 55, player->getPositionY() + 55);
 	playerbullet1->runAction(movebullet1);
 	
 	this->addChild(playerbullet1);
+	int soundId7 = cocos2d::experimental::AudioEngine::play2d("sound/gunfire.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId7, 0.1);
+
+	
+	
 }
 
 void Weapon::makeMachinegun()
@@ -181,7 +186,6 @@ void Weapon::makeMachinegun()
 		playerbullet1->setRotation(-upPressedTime);
 		playerbullet1->setPosition(player->getPositionX() + 85 + sign * 55, player->getPositionY() + 60);
 		
-
 		playerbullet2 = Sprite::create("machinegun1.png");
 		playerbullet2->setScale(2);
 		playerbullet2->setAnchorPoint(Vec2(0, 0));
@@ -193,16 +197,15 @@ void Weapon::makeMachinegun()
 			playerbullet2->setPosition(player->getPositionX() + 85 + sign * 155, player->getPositionY() + 40);
 	}
 
-	auto moveMachinegunbullet1 = MoveBy::create(0.8, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
-	auto moveMachinegunbullet2 = MoveBy::create(0.8, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
-
-
+	auto moveMachinegunbullet1 = MoveBy::create(1.2, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
+	auto moveMachinegunbullet2 = MoveBy::create(1.2, Vec2(sign * 1000 * cos(upPressedTime * 3.1415 / 180.0f), 1000 * sin(upPressedTime * 3.1415 / 180.0f)));
 
 	playerbullet1->runAction(moveMachinegunbullet1);
 	playerbullet2->runAction(moveMachinegunbullet2);
 	this->addChild(playerbullet1);
 	this->addChild(playerbullet2);
-
+	int soundId7 = cocos2d::experimental::AudioEngine::play2d("sound/machingunfire.mp3");
+	cocos2d::experimental::AudioEngine::setVolume(soundId7, 0.05);
 	
 }
 
@@ -240,9 +243,9 @@ void Weapon::makebomb()
 	bomb->runAction(bombseq);
 
 
-	bezier.controlPoint_1 = Vec2( 0,  150);
-	bezier.controlPoint_2 = Vec2(sign*200,  150);
-	bezier.endPosition = Vec2(sign*200,  -50);
+	bezier.controlPoint_1 = Vec2(0, 200);
+	bezier.controlPoint_2 = Vec2(sign * 200, 200);
+	bezier.endPosition = Vec2(sign * 200, -100);
 	auto bezierby = BezierBy::create(1, bezier);
 	bomb->runAction(bezierby);
 	

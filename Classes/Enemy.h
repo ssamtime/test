@@ -4,8 +4,7 @@
 #include "GameScene.h"
 #include "Player.h"
 #include "Weapon.h"
-
-
+#include "audio/include/AudioEngine.h"
 
 class Enemy : public cocos2d::Layer
 {
@@ -56,17 +55,11 @@ public:
 	cocos2d::Action* bossmoverepforever;
 	cocos2d::Action* bossmoverepforever2;
 
-	/*cocos2d::Action* movetofar1;
-	cocos2d::Action* movetofar2;
-	cocos2d::Action* movetofar3;
-	cocos2d::Action* movetofar4;
-	cocos2d::Action* movetofar5;
-	cocos2d::Action* movetofar6;*/
-
 	cocos2d::Sprite* enemybullet1;
 	cocos2d::Sprite* leftsmallflame;
 	cocos2d::Sprite* rightsmallflame;
 
+	int soundId7;
 
 	void update(float f);
 
@@ -75,9 +68,9 @@ public:
 	void arabianrunning2(cocos2d::Sprite* obj);
 	void arabianrunning3(cocos2d::Sprite* obj);
 	
-
+	void bombfire(cocos2d::Sprite *object);
 	void AnimationCallback();
-	
+	void onAnimationEnded();
 };
 
 extern cocos2d::Sprite* arabian1;
